@@ -22,22 +22,19 @@ def mainmenu():
             elif option == "new game":
                 print(new_game)
                 option_game = input("What to do now ? ")
-                if len(option_game) <= 10 and len(option_game) >= 3:
-                    return "name"
-            
-                elif len(option_game) == 0:
-                    return "name == Link"
-            
-                elif option_game == "Back":
-                    break
-
-                elif option_game == "Help":
+                if option_game == "Help":   
                     print(help_new_game)
                     option_game_help = input("What to do now ? ")
                     if option_game_help == "Back":
                         break
                     else: 
                         return "Incorrect option"
+                elif len(option_game) <= 10 and len(option_game) >= 3:
+                    return "name"
+                elif len(option_game) == 0:
+                    return "name == Link"
+                elif option_game == "Back":
+                    break
                 else:
                     return "Incorrect option"
                 
