@@ -170,29 +170,29 @@ plot = ("""
 game = ("""
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * Inventory *
 *                                                         *                   *
-*                                                         * Link        ♥ 3/5 *
-*                                                         * Blood moon in  25 *
+*                                                         * Link        ♥ 5/5 *
+*                                                         * Blood moon in     *
 *                                                         *                   *
 *                                                         * Equipment         *
 *                                                         *        Wood Sword *
 *                                                         *            Shield *
 *                                                         *                   *
-*                                                         * Food            5 *
-*                                                         * Weapons        10 *
+*                                                         * Food              *
+*                                                         * Weapons           *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 """)
 
 inventory = ("""
 * * * * * Inventory * * * * * * Weapons * * * * * *  Food *
 *                   *                   *                 *
-* Link ♥        3/5 *                   *                 *
-*                   * Wood Sword    5/2 * Vegetables   5  *
-* Equipment         *  (equiped)        * Fish         2  *
-*        Wood Sword * Sword         9/1 * Meat         2  *
+* Link        ♥ 5/5 *                   *                 *
+*                   * Wood Sword    5/2 * Vegetables      *
+* Equipment         *  (equiped)        * Fish            *
+*        Wood Sword * Sword         9/1 * Meat            *
 *            Shield *                   *                 *
-*                   * Wood Shield   5/0 * Salads       2  *
-*            Food 5 *                   * Pescatarian  1  *
-*        Weapons 10 * Shield        9/2 * Roasted      1  *
+*                   * Wood Shield   5/0 * Salads          *
+*            Food   *                   * Pescatarian     *
+*        Weapons    * Shield        9/2 * Roasted         *
 *                   *  (equiped)        *                 *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 """)
