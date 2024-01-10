@@ -130,11 +130,11 @@ about = ("""
 *        Game developed by ‘Team 1, The Whales’ :                             *
 *                                                                             *
 *                                                                             *
-*        Marc Cachinero                                                       *
 *        David Bargados                                                       *
+*        Marc Cachinero                                                       *
 *        Unai Muñoz                                                           *
 *                                                                             *
-*        Type 'back' now to go back to the 'Main menu'                        *
+*        Type 'Back' now to go back to the 'Main menu'                        *
 *                                                                             *
 * Back  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 """)
@@ -288,16 +288,48 @@ necluda = ("""
 """)
 
 castle = ("""
-* Castle * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-*                                                         *                  *
-*       \ /                             Ganon ♥♥♥♥♥♥♥♥    *                  *
-*     -- O --                                             *                  *
-*       / \                                               *                  *
-*                              |>  v-v-v-v   |>           *                  *
-*                      ,   ,  /_\  |     |  /_\           *                  *
-*                      |\_/|  | |'''''''''''| |           *                  *
-*                      (q p),-| | ||  _  || | |'-._ |\    *                  *
-* OT!                X  \_/_(/| |    |#|    | | ) '-//    *                  *
-* OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO*                  *
-* Back, Go, Attack * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+* Castle  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*                                                          *                  *
+*       \ /                             Ganon ♥♥♥♥♥♥♥♥     *                  *
+*     -- O --                                              *                  *
+*       / \                                                *                  *
+*                              |>  v-v-v-v   |>            *                  *
+*                      ,   ,  /_\  |     |  /_\            *                  *
+*                      |\_/|  | |'''''''''''| |            *                  *
+*                      (q p),-| | ||  _  || | |'-._ |\     *                  *
+* OT!                X  \_/_(/| |    |#|    | | ) '-//     *                  *
+* OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO *                  *
+* Back, Go, Attack  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 """)
+
+the_end = ("""
+* Zelda saved * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*           Congratulations, Link has saved Princess Zelda.                   *
+*           Thanks for playing!                                               *
+*                                                                             *
+*                                                                             * 
+*                                                                             *
+*                                                                             * 
+* Continue  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+""")
+
+link_death = ("""
+* Link death  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*           Game Over.                                                        *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+* Continue  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+""")
+
+
