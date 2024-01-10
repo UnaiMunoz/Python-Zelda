@@ -12,7 +12,8 @@ menu1 = ("""
 *                                                           =   ==            *
 *                                                      %%%%%%%%%%%%           *  
 *                                                   %%%%%%%%%%%%%%%           *
-* Continue, New Game, Help, About, Exit * * * * * * * * * * * * * * * * * * * *""")
+* New Game, Help, About, Exit * * * * * * * * * * * * * * * * * * * * * * * * *
+""")
              
 menu2 = ("""
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *         
@@ -26,7 +27,8 @@ menu2 = ("""
 *                                                        &    @@@@\           *
 *                                                             Q  Q            *
 *                                                             Q  Q            *
-* Continue, New Game, Help, About, Exit * * * * * * * * * * * * * * * * * * * *""")
+* New Game, Help, About, Exit * * * * * * * * * * * * * * * * * * * * * * * * *
+""")
 
 menu3 = ("""
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *         
@@ -40,7 +42,8 @@ menu3 = ("""
 *                                                         @@@||     @         *
 *                                                      @@@@@@@@@@@@@          *
 *                                                            ||               *
-* Continue, New Game, Help, About, Exit * * * * * * * * * * * * * * * * * * * *""")
+* New Game, Help, About, Exit * * * * * * * * * * * * * * * * * * * * * * * * *
+""")
 
 menus = [menu1, menu2, menu3]
 menu = random.choice(menus)
@@ -233,7 +236,7 @@ hyrule = ("""
 *                                  E9                    *                    *
 *                                          S0            *                    *
 *                                                        *                    *
-*          !X                                  T         *                    *
+*          X                                   T         *                    *
 * OO    OOOOO         E1        S1?          T M   F     *                    *
 *OOOOOOOOOOO                                             *                    *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -249,7 +252,7 @@ death_mountain = ("""
 * ~~~~~~~~~            OOOOOO            OOOO            *                    * 
 *    ~~~          T        OOOO            OO            *                    *
 *                T          OO       M                   *                    *
-* !   C          T          OO                  S3?      *                    *
+* X   C          T          OO                  S3?      *                    *
 *                                                        *                    *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 """)
@@ -264,7 +267,7 @@ gerudo = ("""
 *            AAAAAA                  E2                  *                    *
 *            AAAAAAAA                                    *                    *
 *    T      AAAAAAA                 OOOOO        F     ~~*                    *
-* !     M     AAA        OOOOO    OOOOO              ~~~~*                    *
+* X     M     AAA        OOOOO    OOOOO              ~~~~*                    *
 *               OOOOOOOOOOOOOOOOOOOO              ~~~~~~~*                    *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 """)
@@ -272,7 +275,7 @@ gerudo = ("""
 necluda = ("""
 * Necluda * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *                     M                                   *                   *
-* !       E1                      TT              M       *                   *
+* X       E1                      TT              M       *                   *
 *OO                C            TT                   ~~~~~*                   *
 *OOOOO                                           ~~~~~~~~~*                   *
 *OOOO                                              ~~~~~~~*                   *
@@ -282,4 +285,19 @@ necluda = ("""
 *~~~~~~~~               M      S6            ~~~~~~~~~~~~~*                   *
 *~~~~~~~~~~~~                           ~~~~~~~~~~~~~~~~~~*                   *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+""")
+
+castle = ("""
+* Castle * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*                                                         *                  *
+*       \ /                             Ganon ♥♥♥♥♥♥♥♥    *                  *
+*     -- O --                                             *                  *
+*       / \                                               *                  *
+*                              |>  v-v-v-v   |>           *                  *
+*                      ,   ,  /_\  |     |  /_\           *                  *
+*                      |\_/|  | |'''''''''''| |           *                  *
+*                      (q p),-| | ||  _  || | |'-._ |\    *                  *
+* OT!                X  \_/_(/| |    |#|    | | ) '-//    *                  *
+* OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO*                  *
+* Back, Go, Attack * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 """)

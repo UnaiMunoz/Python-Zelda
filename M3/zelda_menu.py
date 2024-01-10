@@ -17,19 +17,20 @@ def mainmenu():
         option = option.lower()
         while True:
             if option == "exit":
+                sortir = False
                 break
 
-            elif option == "new game":
+            while option == "new game":
                 print(new_game)
                 option_game = input("What to do now ? ")
-                if option_game == "Help":   
+                while option_game == "Help":
                     print(help_new_game)
-                    option_game_help = input("What to do now ? ")
-                    if option_game_help == "Back":
+                    option_game = input("What to do now ? ")
+                    if option_game == "Back":
                         break
                     else: 
                         return "Incorrect option"
-                elif len(option_game) <= 10 and len(option_game) >= 3:
+                if len(option_game) <= 10 and len(option_game) >= 3:
                     return "name"
                 elif len(option_game) == 0:
                     return "name == Link"
@@ -37,19 +38,22 @@ def mainmenu():
                     break
                 else:
                     return "Incorrect option"
-                
-            
-            elif option == "help":
+
+            if option == "help":
                 print(help_mainmenu)
                 optionhelp = input("What to do now ? ")
-                optionhelpvalid = optionhelp.lower()
-                if optionhelpvalid == "back":
+                if optionhelp == "Back":
                     break
                 else:
                     return "Incorrect option"
             
             elif option == "about":
-                print("About")
+                print(about)
+                option_about = input("What to do now ? ")
+                if option_about == "Back":
+                    break
+                else:
+                    return "Incorect optio"
 
             elif option == "continue":
                 print("Continue")
