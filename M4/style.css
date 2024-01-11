@@ -1,0 +1,24 @@
+body {
+    background-image: url(https://wallpapercave.com/wp/wp9606151.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    font-weight: bold;
+    margin: 0;
+    user-select: none;
+    padding: 0;
+}
+
+body p {
+    font-family: 'Lato', sans-serif;
+}
+
+body h3 {
+    font-family: 'Nerko One', cursive;
+    font-size: 45px;
+}
+
+body h5 {
+    font-family: 'Nerko One', cursive;
+    font-size: 20px;
+}
