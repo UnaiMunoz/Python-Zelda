@@ -8,6 +8,25 @@ from ascii import about
 from ascii import legend
 from ascii import plot
 
+savedGames = []
+
+def player():
+
+    return
+
+#def confirm_name(name):
+    if (name.len() >= 3) and (name.len() <= 10):
+        for letter in name:
+            if not 
+
+    return
+
+
+
+
+
+
+
 
 def mainmenu():
     sortir = True
@@ -15,29 +34,26 @@ def mainmenu():
         print(menu)
         option = input("What to do now? ")
         option = option.lower()
-        while True:
+        while True: 
             if option == "exit":
                 sortir = False
                 break
 
-            while option == "new game":
+            if option == "new game":
                 print(new_game)
-                option_game = input("What to do now ? ")
-                while option_game == "Help":
-                    print(help_new_game)
-                    option_game = input("What to do now ? ")
-                    if option_game == "Back":
-                        break
-                    else: 
-                        return "Incorrect option"
-                if len(option_game) <= 10 and len(option_game) >= 3:
-                    return "name"
-                elif len(option_game) == 0:
-                    return "name == Link"
-                elif option_game == "Back":
+                option_newgame = input("What to do now ? ")
+ 
+                if option_newgame == "Back":
                     break
-                else:
-                    return "Incorrect option"
+                elif option_newgame == "Help":
+                    print(help_new_game)
+                    option_newgame = input("What to do now ? ")
+                    if option_newgame == "Back":
+                        option = "new game"
+                elif option_newgame <= 10 and option_newgame >= 3:
+                    savedGames.append(option_newgame)
+                    print(savedGames)
+ 
 
             if option == "help":
                 print(help_mainmenu)
@@ -53,7 +69,7 @@ def mainmenu():
                 if option_about == "Back":
                     break
                 else:
-                    return "Incorect optio"
+                    return "Incorect option"
 
             elif option == "continue":
                 print("Continue")
@@ -61,3 +77,11 @@ def mainmenu():
 
 
 mainmenu()
+
+
+
+
+
+
+
+
