@@ -11,27 +11,6 @@ from ascii import about
 from ascii import legend
 from ascii import plot
 
-savedGames = []
-
-def player():
-
-    return
-
-#def confirm_name(name):
-    if (name.len() >= 3) and (name.len() <= 10):
-        for letter in name:
-            if not 
-
-    return
-
-
-
-
-
-
-
-
-
 def clearScreen():
     sistema_operativo = os.name
 
