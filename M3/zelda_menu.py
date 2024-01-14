@@ -11,6 +11,25 @@ from ascii import about
 from ascii import legend
 from ascii import plot
 
+savedGames = []
+
+def player():
+
+    return
+
+#def confirm_name(name):
+    if (name.len() >= 3) and (name.len() <= 10):
+        for letter in name:
+            if not 
+
+    return
+
+
+
+
+
+
+
 
 
 def clearScreen():
@@ -55,7 +74,7 @@ def mainmenu():
         option = input("\nWhat to do now? ")
         addText(option)
         option = option.lower()
-        while True:
+        while True: 
             if option == "exit":
                 print("You leave the game")
                 sortir = False
