@@ -259,16 +259,16 @@ death_mountain = ("""
 
 gerudo = ("""
 * Gerudo  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-*OOOOOOOOOOOOOOOO                                  M     *                    *
-* OOOOO OOOOO              TTT                           *                    *
-*                            TT             S4          O*                    *
-* E1          C                                        OO*                    *
-*                                                      OO*                    *
-*            AAAAAA                  E2                  *                    *
-*            AAAAAAAA                                    *                    *
-*    T      AAAAAAA                 OOOOO        F     ~~*                    *
-* X     M     AAA        OOOOO    OOOOO              ~~~~*                    *
-*               OOOOOOOOOOOOOOOOOOOO              ~~~~~~~*                    *
+*OOOOOOOOOOOOOOOO                                  M      *                   *
+* OOOOO OOOOO              TTT                            *                   *
+*                            TT             S4           O*                   *
+* E1          C                                         OO*                   *
+*                                                       OO*                   *
+*            AAAAAA                  E2                   *                   *
+*            AAAAAAAA                                     *                   *
+*    T      AAAAAAA                 OOOOO        F      ~~*                   *
+* X     M     AAA        OOOOO    OOOOO               ~~~~*                   *
+*               OOOOOOOOOOOOOOOOOOOO               ~~~~~~~*                   *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 """)
 
