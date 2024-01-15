@@ -1,0 +1,61 @@
+body {
+    margin: 0;
+    padding: 0;
+    padding-top: 230px;
+}
+
+.autocenter2 {
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    max-width: 950px;
+    padding-left: 32px;
+    padding-right: 32px;
+    width: 100%;
+    background-color: #1D1814;
+    color: white;
+    border-radius: 10px;
+    animation: barra 4s infinite linear;
+}
+
+@keyframes barra {
+    0% { transform: scale3d(1 , 1, 1);}
+    50% { transform: scale3d(1.2, 1.1, 1);}
+    100% { transform: scale3d(1, 1, 1);}
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 0px;
+    padding-top: 0px;   
+}
+
+.menu a {
+    margin-top: 0px;
+    padding-top: 0px;   
+    color: white;
+}
+
+.menu a :hover {
+    color: green;
+}
+
+.menu h3 {
+    font-size: 21px;
+}
+
+@media screen and (max-width: 767px) 
+{
+.autocenter2 {
+    max-width: auto;
+}
+.menu h3 {
+    font-size: 15px;
+}
+.icono_titulo h1 {
+    display: none;
+}
+}

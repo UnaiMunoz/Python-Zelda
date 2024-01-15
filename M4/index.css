@@ -1,0 +1,310 @@
+.sticky {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+}
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: #fff;
+}
+.autocenter_d {
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 700px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    margin-top: 5px;
+    width: 100%;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+.autocenter_d:hover {
+    transform: scale(1.05);
+}
+
+.titulo_gojo {
+    margin-left: 45px;
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+
+.titulo_deku h3 {
+    font-size: 30px;
+}
+
+.deku_image img {
+    margin-left: 90px;
+    max-width: 450px;
+    border-radius: 15px;
+}
+
+.explicacion_gojo {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+}
+
+.explicacion_gojo .espe {
+    margin-left: 30px;
+    max-width: 130px;
+    font-size: medium;
+    margin-right: 25px;
+}
+
+.explicacion_gojo .expli {
+    margin-top: 10px;
+    max-width: 460px;
+    font-size: 13px;
+}
+
+.autocenter_m {
+    box-sizing: border-box;
+    margin-left: auto;
+    flex-direction: column;
+    margin-right: auto;
+    max-width: 700px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    margin-top: 25px;
+    width: 100%;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.autocenter_m:hover {
+    transform: scale(1.05);
+}
+
+.titulo_momento {
+    margin-top: 35px;
+    margin-left: 45px;
+    margin-bottom: 30px;
+}
+
+.titulo_momento h3 {
+    font-size: 30px;
+}
+
+.momento_index video {
+    margin-left: 90px;
+    max-width: 450px;
+    border-radius: 15px;
+}
+
+.explicacion_momento {
+    margin-left: 40px;
+    max-width: 570px;
+    font-size: small;
+}
+
+.autocenter_p {
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    max-width: 700px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    margin-top: 25px;
+    width: 100%;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.autocenter_p:hover {
+    transform: scale(1.05);
+}
+
+.autocenter_p h3 {
+    font-size: 30px;
+}
+
+.autocenter_p .izquierda_p {
+    max-width: 350px;
+}
+
+.izquierda_p img {
+    max-width: 600px;
+    width: auto;
+}
+
+.producto_index1 {
+    position: relative;
+    width: 50%;
+}
+
+.image1 {
+    opacity: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: .5s ease;
+    backface-visibility: hidden;
+}
+
+.middle1 {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    margin-left: 60px;
+    text-align: center;
+}
+
+.producto_index1:hover .image1 {
+    opacity: 0.3;
+}
+
+.producto_index1:hover .middle1 {
+    opacity: 1;
+}
+
+.text1 {
+    background-color: #04AA6D;
+    color: white;
+    font-size: 15px;
+    padding: 15px;
+    width: 53px;
+}
+
+.autocenter_p .derecha_p {
+    max-width: 350px;
+}
+
+.derecha_p img {
+    max-width: 225px;
+    width: auto;
+}
+
+.producto_index2 {
+    position: relative;
+    width: 50%;
+}
+
+.image2 {
+    opacity: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: .5s ease;
+    backface-visibility: hidden;
+}
+
+.middle2 {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    margin-left: 70px;
+    text-align: center;
+}
+
+.producto_index2:hover .image2 {
+    opacity: 0.3;
+}
+
+.producto_index2:hover .middle2 {
+    opacity: 1;
+}
+
+.text2 {
+    background-color: #04AA6D;
+    color: white;
+    font-size: 15px;
+    padding: 15px;
+    width: 53px;
+}
+
+@media  only screen and (max-width: 768px){
+    .autocenter_d {
+        max-width: auto;
+    }
+    .deku_image img {
+        margin: auto;
+        align-self: center; 
+        max-width: 350px;
+    }
+    .explicacion_gojo {
+        display:flex ;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .explicacion_gojo .espe {
+        max-width: auto;
+        font-size: smaller;
+    }
+    .explicacion_gojo .expli {
+        max-width: auto;
+        font-size: small;
+        margin-top: 0px;
+    }
+    .autocenter_m {
+        max-width: auto;
+    }
+    .titulo_momento {
+        margin: auto;
+    }
+    .titulo_momento h3 {
+        text-align: center;
+    }
+    .momento_index video {
+        margin: auto;
+        align-self: center;
+        max-width: 350px;
+    }
+    .explicacion_momento {
+        margin: auto;
+        align-self: center;
+        font-size: smaller;
+    }
+    .autocenter_p {
+        max-width: auto;
+    }
+    .autocenter_p h3 {
+        font-size: 17px;
+        text-align: center;
+    }
+    .autocenter_p .izquierda_p {
+        max-width: auto;
+    }
+    .izquierda_p img {
+        margin: auto;
+        max-width: 140px;
+    }
+    .autocenter_p .derecha_p {
+        max-width: auto;
+    }
+    .derecha_p img {
+        margin: auto;
+        max-width: 154px;
+    }
+    .middle1 {
+        margin-left: 40px;
+    }
+    .middle2 {
+        margin-left: 40px;
+    }
+}
