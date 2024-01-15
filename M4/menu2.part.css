@@ -40,7 +40,7 @@ body {
 }
 
 .menu a :hover {
-    color: green;
+    color: rgb(0, 228, 65);
 }
 
 .menu h3 {
