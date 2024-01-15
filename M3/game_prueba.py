@@ -25,7 +25,7 @@ def showPrompt():
 
 def encontrar_personaje(mapa, simbolo):
     for i in range(len(mapa)):
-        for j in range(len(mapa[0])):
+        for j in range(len(mapa[i])):
             if mapa[i][j] == simbolo:
                 return i, j
 
@@ -46,22 +46,16 @@ def mover_personaje(mapa, posicion, direccion):
     elif direccion == 'd' and nueva_posicion[1] < len(mapa[0]) - 1:
         nueva_posicion[1] += 1
     else:
+        print("No puedes moverte en esa dirección.")
         return False
 
     if 0 <= nueva_posicion[0] < len(mapa) and 0 <= nueva_posicion[1] < len(mapa[0]):
-        if mapa[nueva_posicion[0]][nueva_posicion[1]] not in ['#', 'O', 'T', 'C', 'E', 'S', 'M', 'F', "~", "1", "9", "0"]:
+        if mapa[nueva_posicion[0]][nueva_posicion[1]] not in ['#', 'O', 'T', 'C', 'E', 'S', 'M', 'F', '1', '9', '0', '~']:
             mapa[posicion[0]][posicion[1]] = ' '
             mapa[nueva_posicion[0]][nueva_posicion[1]] = 'X'
-            if direccion.lower() == "w":
-                addText(f"You have moved up.")
-            elif direccion.lower() == "s":
-                addText("You have moved down")
-            elif direccion.lower() == "a":
-                addText("You have moved left")
-            elif direccion.lower() == "d":
-                addText("You have moved right")
             return True
 
+    print("No puedes moverte en esa dirección o has llegado al límite del mapa.")
     return False
 
 
@@ -80,7 +74,7 @@ mapa = [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '
         ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',' ']
 ]
 
-posicion_personaje = obtener_posicion_personaje(mapa, 'X')
+posicion_personaje = encontrar_personaje(mapa, 'X')
 
 while True:
     limpiar_pantalla()
@@ -91,9 +85,17 @@ while True:
     if direccion.lower() == 'salir':
         break
 
-    if not mover_personaje(mapa, posicion_personaje, direccion.lower()):
-        addText("No puedes moverte en esa dirección.")
-    
-    posicion_personaje = encontrar_personaje(mapa, 'X')
+    if mover_personaje(mapa, posicion_personaje, direccion.lower()):
+        posicion_personaje = encontrar_personaje(mapa, 'X')
+        if direccion.lower() == "w":
+            addText("Te has movido hacia arriba")
+        elif direccion.lower() == "a":
+            addText("Te has movido hacia la izquierda")
+        elif direccion.lower() == "s":
+            addText("Te has movido hacia abajo")
+        elif direccion.lower() == "d":
+            addText("Te has movido hacia la derecha")
+    else:
+        addText("No puedes moverte en esa dirección o has llegado al límite del mapa.")
 
 print("Juego terminado.")
