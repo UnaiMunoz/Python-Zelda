@@ -33,6 +33,27 @@ body {
     padding-top: 0px;   
 }
 
+.menu-item {
+    position: relative;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #1D1814;
+    border-radius: 0 0 10px 10px;
+    padding: 10px;
+    color: white;
+    text-align: center;
+    width: 150px;
+}
+
+.menu-item:hover .submenu {
+    display: block;
+}
+
 .menu a {
     margin-top: 0px;
     padding-top: 0px;   
