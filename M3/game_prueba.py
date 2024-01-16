@@ -61,7 +61,6 @@ def casillas_especiales(map, new_position):
             for j in range(-1, 2):
                 fila = new_position[0] + i
                 columna = new_position[1] + j
-
                 if 0 <= fila < len(map) and 0 <= columna < len(map[0]) and map[fila][columna] == 'C':
                     addText("You can cook here")  
                 elif 0 <= fila < len(map) and 0 <= columna < len(map[0]) and map[fila][columna] == 'T':
