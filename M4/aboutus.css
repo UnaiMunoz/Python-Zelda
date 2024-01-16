@@ -1,27 +1,88 @@
 body {
-    margin: 0;
-    padding: 0;
-    padding-top: 230px;
+  margin: 0;
+  padding: 0;
+  padding-top: 230px;
 }
 
 @keyframes aparecerDesaparecer {
-    0%, 100% {
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-    50% {
-      opacity: 1;
-      transform: translateX(0);
-    }
+  0%, 100% {
+    opacity: 0;
+    transform: translateX(-20px);
   }
-  
-  .animacion-texto {
-    font: 1.7rem rapscallion;
-    letter-spacing: 3px;
-    text-shadow: 1px 1px 0 #fff, 0 0 9px #000;
-    display: inline-block;
-    animation: aparecerDesaparecer 10s ease-in-out infinite; /* Aumentar la duración a 4 segundos */
-    background-color: transparent;
-    padding: 10px;
-    border-radius: 10px;
+  50% {
+    opacity: 1;
+    transform: translateX(0);
   }
+}
+
+.animacion-texto {
+  font: 1.7rem rapscallion;
+  letter-spacing: 3px;
+  text-shadow: 1px 1px 0 #fff, 0 0 9px #000;
+  display: inline-block;
+  animation: aparecerDesaparecer 10s ease-in-out infinite; /* Aumentar la duración a 10 segundos */
+  background-color: transparent;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+header {
+  background-color: #007bff;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+
+section {
+  background-color: #fff;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.developer img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  border: 5px solid #20ce17;
+}
+
+/* Update the styles for the section with the ID 'zelda-game' */
+#zelda-game {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+#zelda-game .background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(''); /* Replace with the actual image URL or file path */
+  background-size: cover;
+  background-position: center;
+  opacity: 0.5; /* Adjust the opacity as needed */
+  z-index: -1;
+  border: 5px; /* Remove the border */
+}
+
+#zelda-game .content {
+  z-index: 1;
+  position: relative;
+  padding: 20px; /* Add padding to the content area if needed */
+}
