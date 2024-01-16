@@ -1,3 +1,6 @@
+import random
+import os
+
 from ascii import menu
 from ascii import help_mainmenu
 from ascii import saved_games
@@ -8,80 +11,117 @@ from ascii import about
 from ascii import legend
 from ascii import plot
 
-savedGames = []
+def clearScreen():
+    sistema_operativo = os.name
 
-def player():
+    if sistema_operativo == 'posix':  # Para sistemas basados en Unix/Linux/Mac
+        os.system('clear')
+    elif sistema_operativo == 'nt':  # Para sistemas Windows
+        os.system('cls')
 
-    return
+prompt_historial = []
 
-#def confirm_name(name):
-    if (name.len() >= 3) and (name.len() <= 10):
-        for letter in name:
-            if not 
+def addText(texto):
+    prompt_historial.append(texto)
 
-    return
+    if len(prompt_historial) > 8:
+        prompt_historial.pop(0)
 
+def showPrompt():
+    if prompt_historial:
+        print("Latest actions: ")
+        for prompt in prompt_historial:
+            print("->" + " " + prompt)
+    else:
+        print("There are no actions yet")
 
-
-
-
-
+def validateName(name):
+    allowed_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
+    if all(caracter in allowed_characters for caracter in name):
+        if (len(name) >= 3) and (len(name) <= 10):
+            return True
+    else:
+        return False    
 
 
 def mainmenu():
     sortir = True
     while sortir == True:
+        clearScreen()
         print(menu)
-        option = input("What to do now? ")
+        showPrompt()
+        option = input("\nWhat to do now? ")
+        addText(option)
         option = option.lower()
         while True: 
             if option == "exit":
+                print("You leave the game")
                 sortir = False
                 break
 
-            if option == "new game":
+            while option == "new game":
+                clearScreen()
                 print(new_game)
-                option_newgame = input("What to do now ? ")
- 
-                if option_newgame == "Back":
-                    break
-                elif option_newgame == "Help":
+                showPrompt()
+                option_game = input("\nWhat's your name (Link) ? ")
+                while option_game == "Help":
+                    addText("Help")
+                    clearScreen()
                     print(help_new_game)
-                    option_newgame = input("What to do now ? ")
-                    if option_newgame == "Back":
-                        option = "new game"
-                elif option_newgame <= 10 and option_newgame >= 3:
-                    savedGames.append(option_newgame)
-                    print(savedGames)
- 
+                    showPrompt()
+                    option_game2 = input("\nWhat to do now ? ")
+                    if option_game2 == "Back":
+                        addText("Back")
+                        break
+                    else: 
+                        addText("Invalid action")
+                while validateName(option_game) == True and option_game != "Back":
+                    clearScreen()
+                    addText(f'Welcome to the game, "{option_game}"')
+                    print(legend)
+                    showPrompt()
+                    option_legend = input("\nType 'continue' to continue ")
+                    if option_legend == "Continue":
+                        addText(option_legend)
+                        print(plot)
+                        showPrompt()
+                        option_plot = input("\nType 'continue' to continue")
+                    else:
+                        addText("Invalid action")
+
+                if len(option_game) == "":
+                    addText(f'Welcome to the game, "{option_game}"')
+
+                elif option_game == "Back":
+                    addText(option_game)
+                    break
+                else:
+                    addText(f'"{option_game}" is not a valid name')
 
             if option == "help":
+                clearScreen()
                 print(help_mainmenu)
-                optionhelp = input("What to do now ? ")
+                showPrompt()
+                optionhelp = input("\nWhat to do now ? ")
                 if optionhelp == "Back":
+                    addText(optionhelp)
                     break
                 else:
-                    return "Incorrect option"
+                    addText("Invalid action")
             
             elif option == "about":
+                clearScreen()
                 print(about)
-                option_about = input("What to do now ? ")
+                showPrompt()
+                option_about = input("\nWhat to do now ? ")
                 if option_about == "Back":
+                    addText(option_about)
                     break
                 else:
-                    return "Incorect option"
+                    addText("Invalid action")
 
             elif option == "continue":
                 print("Continue")
         
-
-
 mainmenu()
-
-
-
-
-
-
-
 
