@@ -1,5 +1,5 @@
 import os
-
+import random
 def clearScreen():
     sistema_operativo = os.name
     if sistema_operativo == 'posix':
@@ -54,9 +54,37 @@ def mover_personaje(map, position, direccion):
             map[position[0]][position[1]] = ' '
             map[new_position[0]][new_position[1]] = 'X'
             return True
-
+    
     return False
+def casillas_especiales(map, new_position):
+        for i in range(-1, 2):
+            for j in range(-1, 2):
+                fila = new_position[0] + i
+                columna = new_position[1] + j
 
+                if 0 <= fila < len(map) and 0 <= columna < len(map[0]) and map[fila][columna] == 'C':
+                    addText("You can cook here")  
+                elif 0 <= fila < len(map) and 0 <= columna < len(map[0]) and map[fila][columna] == 'T':
+                    addText("You can hit this tree")
+                    pegar_arbol(map, new_position)
+
+
+def pegar_arbol(map, new_position):
+         for i in range(-1, 2):
+            for j in range(-1, 2):
+                fila = new_position[0] + i
+                columna = new_position[1] + j   
+                if 0 <= fila < len(map) and 0 <= columna < len(map[0]) and map[fila][columna] == 'T':
+                                pegar = input("Wanna hit this tree?: ")                               
+                                if pegar.lower() == 'yes':
+                                    probabilidad = random.randint(1, 10)
+                                    
+                                    if probabilidad in [1, 2, 3, 4]:
+                                        addText('You obtained an apple')
+                                    elif probabilidad == 5:
+                                        addText('You obtained a sword')
+                                    else:
+                                        addText('You obtained nothing')
 
 def obtener_position_personaje(map, symbol):
     return find_link(map, symbol)
@@ -88,12 +116,17 @@ while True:
         character_position = find_link(map, 'X')
         if direction.lower() == "w":
             addText("You have moved up")
+            casillas_especiales(map,character_position)
         elif direction.lower() == "a":
             addText("You have moved left")
+            casillas_especiales(map,character_position)
         elif direction.lower() == "s":
             addText("You have moved down")
+            casillas_especiales(map,character_position)
         elif direction.lower() == "d":
             addText("You have moved right")
+            casillas_especiales(map,character_position)
+
     else:
         addText("You cannot move in that direction or you have reached the limit of the map.")
 
