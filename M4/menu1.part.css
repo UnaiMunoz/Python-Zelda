@@ -17,6 +17,7 @@ body {
     background-color: #353535;
     color: white;
     border-radius: 10px;
+    
 }
 
 .icono_titulo {
@@ -31,8 +32,8 @@ body {
 }
 
 .icono_titulo img {
-    margin-top: 15px;
-    width: 60px;
+    margin-top: 5px;
+    width: 70px;
 }
 
 @media screen and (max-width: 767px) 

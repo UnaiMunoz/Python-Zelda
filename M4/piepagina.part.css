@@ -1,0 +1,17 @@
+.autocenter_pie {
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    max-height: 35px;
+    display: flex;
+    width: auto;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: #353535;
+    color: white;
+}
+
