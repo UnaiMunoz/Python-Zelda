@@ -3,3 +3,26 @@ body {
     padding: 0;
     padding-top: 230px;
 }
+
+@keyframes aparecerDesaparecer {
+    0%, 100% {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    50% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  .animacion-texto {
+    font: 1.7rem rapscallion; /* Estilo de letra y tamaño */
+    letter-spacing: 3px; /* Espaciado entre letras */
+    text-shadow: 1px 1px 0 #fff, 0 0 9px #000; /* Sombra de texto */
+    display: inline-block;
+    animation: aparecerDesaparecer 2s ease-in-out infinite;
+    background-color: #fff; /* Fondo blanco */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 10px; /* Bordes redondeados */
+  }
+  
