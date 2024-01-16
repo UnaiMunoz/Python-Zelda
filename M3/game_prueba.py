@@ -30,8 +30,8 @@ def find_link(map, symbol):
                 return i, j
 
 def print_map(map):
-    for fila in map:
-        print(' '.join(fila))
+    for x in map:
+        print(' '.join(x))
     print()
 
 def mover_personaje(map, position, direccion):
@@ -73,6 +73,8 @@ map =  [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '
         ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',' ']
 ]
 
+character_position = find_link(map, 'X')
+
 while True:
     clearScreen()
     print_map(map)
@@ -95,4 +97,4 @@ while True:
     else:
         addText("You cannot move in that direction or you have reached the limit of the map.")
 
-print("Juego terminado.")
+print("Game finished.")
