@@ -212,7 +212,7 @@ while True:
             back = input("Escribe 'back' para regresar: ")
             if back.lower() == "back":
                 addText(back)
-                break  # Salir del bucle interno
+                break  
             else:
                 addText("Entrada no válida. Intenta de nuevo.")
 
