@@ -52,7 +52,7 @@ def move_character(map, position, direccion):
         return False
 
     if 0 <= new_position[0] < len(map) and 0 <= new_position[1] < len(map[0]):
-        if map[new_position[0]][new_position[1]] not in ['#', 'O', 'T', 'C', 'S1?', 'M', 'F', '1', 'E9', '0', '~', '*']:
+        if map[new_position[0]][new_position[1]] not in ['#', 'O', 'T', 'C', 'S1?',  'S1 ', 'S0?', 'S0 ', 'M', 'F', '1', 'E9', '0', '~', '*']:
             map[position[0]][position[1]] = ' '
             map[new_position[0]][new_position[1]] = 'X'
             return True
@@ -60,7 +60,7 @@ def move_character(map, position, direccion):
     return False
 
 def special_symbols(map, new_position):
-    for i in range(-1, 2):
+     for i in range(-1, 2):
         for j in range(-1, 2):
             row = new_position[0] + i
             column = new_position[1] + j
@@ -71,6 +71,10 @@ def special_symbols(map, new_position):
                 hit_tree(map, new_position)
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'E1':
                 attack_enemy(map, new_position)
+            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'S0?':
+                interactuar_santuario0(map, character_position)
+            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'S1?':
+                interactuar_santuario1(map, character_position)
 
 def hit_tree(map, new_position):
     for i in range(-1, 2):
@@ -149,7 +153,19 @@ def check_nearby_element(map, position, element):
                 return (i, j)  # Devolver las coordenadas del elemento
     return None
 
-def interactuar_santuario(map, character_position):
+def interactuar_santuario0(map, character_position):
+    global lives_character  # Declarar vida_personaje como global
+
+    santuario_position = check_nearby_element(map, character_position, 'S0?')
+    if santuario_position:
+        # Incrementar la vida
+        lives_character += 1
+        # Actualizar el mapa
+        map[santuario_position[0]][santuario_position[1]] = 'S0 '
+        # Mensaje
+        addText(f"Has encontrado un santuario, tu vida ha aumentado. Ahora tienes {lives_character} vidas.")
+
+def interactuar_santuario1(map, character_position):
     global lives_character  # Declarar vida_personaje como global
 
     santuario_position = check_nearby_element(map, character_position, 'S1?')
