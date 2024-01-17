@@ -185,20 +185,6 @@ game = ("""
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 """)
 
-inventory = ("""
-* * * * * Inventory * * * * * * Weapons * * * * * *  Food *
-*                   *                   *                 *
-* Link        ♥ 5/5 *                   *                 *
-*                   * Wood Sword    5/2 * Vegetables      *
-* Equipment         *  (equiped)        * Fish            *
-*        Wood Sword * Sword         9/1 * Meat            *
-*            Shield *                   *                 *
-*                   * Wood Shield   5/0 * Salads          *
-*            Food   *                   * Pescatarian     *
-*        Weapons    * Shield        9/2 * Roasted         *
-*                   *  (equiped)        *                 *
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-""")
 
 help_inventory = ("""
 * Help, inventory * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

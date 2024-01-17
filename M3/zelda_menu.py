@@ -1,6 +1,5 @@
 import random
 import os
-
 from ascii import menu
 from ascii import help_mainmenu
 from ascii import saved_games
@@ -43,7 +42,6 @@ def validateName(name):
     else:
         return False    
 
-
 def mainmenu():
     sortir = True
     while sortir == True:
@@ -82,10 +80,13 @@ def mainmenu():
                     showPrompt()
                     option_legend = input("\nType 'continue' to continue ")
                     if option_legend == "Continue":
+                        clearScreen()
                         addText(option_legend)
                         print(plot)
                         showPrompt()
-                        option_plot = input("\nType 'continue' to continue")
+                        option_plot = input("\nType 'continue' to continue: ")
+                        clearScreen()
+                        import hyrule                           
                     else:
                         addText("Invalid action")
 
@@ -108,7 +109,8 @@ def mainmenu():
                     break
                 else:
                     addText("Invalid action")
-            
+           
+                
             elif option == "about":
                 clearScreen()
                 print(about)
@@ -119,9 +121,6 @@ def mainmenu():
                     break
                 else:
                     addText("Invalid action")
-
-            elif option == "continue":
-                print("Continue")
         
 mainmenu()
 
