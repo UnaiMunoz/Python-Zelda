@@ -1,10 +1,10 @@
 import os
 import random
 import mysql.connector
-
 conexion = mysql.connector.connect(user='root', password='david',
                                    host='localhost',
                                    database='Zelda')
+
 
 cursor = conexion.cursor()
 def clearScreen():
@@ -64,6 +64,8 @@ def move_character(map, position, direccion):
             return True
     
     return False
+def summon_cocina(cocina):
+    from cocinar import cocinar
 
 def special_symbols(map, new_position):
      for i in range(-1, 2):
@@ -71,7 +73,9 @@ def special_symbols(map, new_position):
             row = new_position[0] + i
             column = new_position[1] + j
             if 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'C':
-                addText("Puedes cocinar aquí")  
+                cooking = input("What do you wanna cook?(Salad/Pescatarian/Roasted)")
+                addText("Puedes cocinar aquí")
+                summon_cocina(cooking)  
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'T':
                 addText("Puedes golpear este árbol")
                 hit_tree(map, new_position)

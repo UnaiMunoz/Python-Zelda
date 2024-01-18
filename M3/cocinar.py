@@ -14,8 +14,7 @@ def cocinar(cooking):
         cursor.execute("""
         UPDATE game_food
         SET quantity_remaining = quantity_remaining - 2
-        WHERE food_name = 'Apple';""")
-        print("You obtained one salad, -2 Apples")
+        WHERE food_name = 'Apple' AND quantity_remaining >= 2;""")
         if cursor.rowcount == 0:
             print("You can't cook that! Not enough 'Apple' available.")
         #AÑADIR ENSALADA
