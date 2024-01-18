@@ -65,7 +65,7 @@ def cocinar(cooking):
             WHERE food_name = 'roasted' AND quantity_remaining >= 0;
         """)
     else:
-        print("puta")
+        print("You cant cook that!!!")
 cooking = input("What do you wanna cook?(Salad/Pescatarian/Roasted)")
 cocinar(cooking)
 conexion.commit()
