@@ -1,0 +1,43 @@
+body {
+    background-color: black;
+    margin: 0 auto;
+    color: red;
+    background-image: url('Imagenes/domainsuku.png');
+}
+
+.container {
+    position: relative;
+    height: auto;
+    width: 400px;
+    margin: auto;
+}
+
+.container img {
+    width: 100%;
+    height: auto;
+    margin: auto;
+    transition: opacity 0.3s ease;
+}
+
+.t {
+    background-color: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    top: 0;
+    right: 20%; 
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    transition: all 0.4s;
+    border-radius: 10px;
+    transform: translateX(10px); 
+    opacity: 0; 
+}
+
+.container:hover .t {
+    
+    transform: translateX(-100%); 
+    opacity: 1; }
+img#domain {
+    transform: translateX(240%);
+}
