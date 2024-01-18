@@ -1,6 +1,5 @@
 import random
 import os
-
 from ascii import menu
 from ascii import help_mainmenu
 from ascii import saved_games
@@ -10,7 +9,17 @@ from ascii import help_new_game
 from ascii import about
 from ascii import legend
 from ascii import plot
+from datetime import date
+import mysql.connector
 
+conexion = mysql.connector.connect(user='root', password='david',
+                                   host='localhost',
+                                   database='Zelda')
+cursor = conexion.cursor()
+hoy = date.today()
+corazones = 3
+
+id = 0
 def clearScreen():
     sistema_operativo = os.name
 
@@ -42,7 +51,14 @@ def validateName(name):
             return True
     else:
         return False    
-
+def update_nombre(name,id):
+    actualizar = (f"""
+            INSERT INTO game (game_id, user_name, date_started, hearts_remaining, blood_moon_countdown, blood_moon_appearances, region_char)
+            VALUES ({id}, '{name}', '{hoy}', {corazones}, 0, 0, 'Hyrule');
+        """)
+    cursor.execute(actualizar)
+    conexion.commit()
+    conexion.close()
 
 def mainmenu():
     sortir = True
@@ -77,19 +93,24 @@ def mainmenu():
                         addText("Invalid action")
                 while validateName(option_game) == True and option_game != "Back":
                     clearScreen()
+                    update_nombre(option_game,id + 1)
                     addText(f'Welcome to the game, "{option_game}"')
                     print(legend)
                     showPrompt()
                     option_legend = input("\nType 'continue' to continue ")
                     if option_legend == "Continue":
+                        clearScreen()
                         addText(option_legend)
                         print(plot)
                         showPrompt()
-                        option_plot = input("\nType 'continue' to continue")
+                        option_plot = input("\nType 'continue' to continue: ")
+                        clearScreen()
+                        import hyrule                           
                     else:
                         addText("Invalid action")
 
                 if len(option_game) == "":
+                    option_game = 'link'
                     addText(f'Welcome to the game, "{option_game}"')
 
                 elif option_game == "Back":
@@ -108,7 +129,8 @@ def mainmenu():
                     break
                 else:
                     addText("Invalid action")
-            
+           
+                
             elif option == "about":
                 clearScreen()
                 print(about)
@@ -119,9 +141,6 @@ def mainmenu():
                     break
                 else:
                     addText("Invalid action")
-
-            elif option == "continue":
-                print("Continue")
         
 mainmenu()
 
