@@ -1,8 +1,5 @@
 body {
-    background-color: black;
     margin: 0 auto;
-    color: red;
-    background-image: url('Imagenes/domainsuku.png');
 }
 
 .container {
@@ -19,25 +16,36 @@ body {
     transition: opacity 0.3s ease;
 }
 
-.t {
+.t,
+.t2 {
+    right: 15%;
     background-color: rgba(0, 0, 0, 0.8);
     position: absolute;
     top: 0;
-    right: 20%; 
     height: 100%;
-    width: 100%;
+    width: 90%;  
     padding: 10px;
     box-sizing: border-box;
     transition: all 0.4s;
     border-radius: 10px;
     transform: translateX(10px); 
     opacity: 0; 
+    height: 170%;
+
 }
 
-.container:hover .t {
-    
+.t2 {
+    left: auto;
+    right: -185%;  
+}
+
+.container:hover .t,
+.container:hover .t2 {
     transform: translateX(-100%); 
-    opacity: 1; }
-img#domain {
-    transform: translateX(240%);
+    opacity: 1; 
+}
+
+.hover-trigger:hover + .t img,
+.hover-trigger:hover + .t2 img {
+    opacity: 1;
 }
