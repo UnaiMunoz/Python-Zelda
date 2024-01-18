@@ -323,7 +323,7 @@ link_death = ("""
 
 
 
-for lista in hyrule:
+for lista in map:
     for elemento in lista:
         print(elemento, end=' ')
     print()  # Agrega un salto de línea después de imprimir cada lista
