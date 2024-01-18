@@ -1,52 +1,38 @@
 import random
 
-class Espada:
-    def __init__(self, usos_totales=5, danio_por_uso=1):
-        self.usos_totales = usos_totales
-        self.usos_restantes = usos_totales
-        self.danio_por_uso = danio_por_uso
+# Función para usar una espada
+def usar_espada(espada):
+    if espada["usos_restantes"] > 0:
+        print(f"La espada ha infligido {espada['danio_por_uso']} de daño.")
+        espada["usos_restantes"] -= 1
+        print(f"Usos restantes: {espada['usos_restantes']}")
+    else:
+        print("La espada está rota. No puedes usarla más.")
 
-    def usar(self):
-        if self.usos_restantes > 0:
-            print(f"La espada ha infligido {self.danio_por_uso} de daño.")
-            self.usos_restantes -= 1
-            print(f"Usos restantes: {self.usos_restantes}")
-        else:
-            print("La espada está rota. No puedes usarla más.")
-
-class Escudo:
-    def __init__(self, usos_totales=5, danio_por_uso=1):
-        self.usos_totales = usos_totales
-        self.usos_restantes = usos_totales
-        self.danio_por_uso = danio_por_uso
-
-    def bloquear(self):
-        if self.usos_restantes > 0:
-            print(f"El escudo ha bloqueado {self.danio_por_uso} de daño.")
-            self.usos_restantes -= 1
-            print(f"Usos restantes: {self.usos_restantes}")
-        else:
-            print("El escudo está demasiado dañado. No puedes bloquear más.")
+# Función para bloquear con un escudo
+def bloquear_escudo(escudo):
+    if escudo["usos_restantes"] > 0:
+        print(f"El escudo ha bloqueado {escudo['danio_por_uso']} de daño.")
+        escudo["usos_restantes"] -= 1
+        print(f"Usos restantes: {escudo['usos_restantes']}")
+    else:
+        print("El escudo está demasiado dañado. No puedes bloquear más.")
 
 # Crear instancias de las espadas y escudos
-espada_madera = Espada(usos_totales=5, danio_por_uso=1)
-escudo_madera = Escudo(usos_totales=5, danio_por_uso=1)
-escudo_generico = Escudo(usos_totales=9, danio_por_uso=1)
-espada_generica = Espada(usos_totales=9, danio_por_uso=1)
+espada_madera = {"usos_totales": 5, "usos_restantes": 5, "danio_por_uso": 1}
+escudo_madera = {"usos_totales": 5, "usos_restantes": 5, "danio_por_uso": 1}
+escudo_generico = {"usos_totales": 9, "usos_restantes": 9, "danio_por_uso": 1}
+espada_generica = {"usos_totales": 9, "usos_restantes": 9, "danio_por_uso": 1}
 
 # Usar y bloquear algunas veces para demostrar su funcionamiento
-for _ in range(3):
-    espada_madera.usar()
+for _ in range(6):
+    usar_espada(espada_madera)
 
 for _ in range(3):
-    escudo_madera.bloquear()
+    bloquear_escudo(escudo_madera)
 
 for _ in range(3):
-    escudo_generico.bloquear()
-
-
-
-import random
+    bloquear_escudo(escudo_generico)
 
 #Abrir cofres por zonas
 
