@@ -42,6 +42,25 @@ def cocinar(cooking):
         SET quantity_remaining = quantity_remaining + 1
         WHERE food_name = 'pescatarian' AND quantity_remaining >= 0;
         """)
+    elif cooking == "roasted":
+        roasted = "You selected Roasted"
+        cursor.execute("""
+        UPDATE game_food
+        SET quantity_remaining = quantity_remaining - 1
+        WHERE food_name = 'Meat' AND quantity_remaining >= 1;
+
+        UPDATE game_food
+        SET quantity_remaining = quantity_remaining - 1
+        WHERE food_name = 'Apple' AND quantity_remaining >= 1;
+        """)
+        if cursor.rowcount == 0:
+            print("You can't cook that! Not enough 'Apple or Meat' available.")
+        # AÑADIR ROASTED
+        cursor.execute("""
+        UPDATE game_food
+        SET quantity_remaining = quantity_remaining + 1
+        WHERE food_name = 'roasted' AND quantity_remaining >= 0;
+        """)
 
 conexion.commit()
 conexion.close()
