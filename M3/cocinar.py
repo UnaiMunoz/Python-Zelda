@@ -9,60 +9,65 @@ conexion = mysql.connector.connect(user='root', password='david',
 cursor = conexion.cursor()
 
 def cocinar(cooking):
-    if cooking == "salad":
+    if cooking.lower() == "salad":
         ensalada = "You selected Salad"
         cursor.execute("""
         UPDATE game_food
         SET quantity_remaining = quantity_remaining - 2
-        WHERE food_name = 'Apple' AND quantity_remaining >= 2;""")
+        WHERE food_name = 'Apple';""")
+        print("You obtained one salad, -2 Apples")
         if cursor.rowcount == 0:
             print("You can't cook that! Not enough 'Apple' available.")
         #AÑADIR ENSALADA
         cursor.execute("""
         UPDATE game_food
         SET quantity_remaining = quantity_remaining + 1
-        WHERE food_name = 'Salad' AND quantity_remaining >= 0;""")
+        WHERE food_name = 'Salad';""")
         #PESCADO
-    elif cooking == "pescatarian":
-        pescadito = "You selected Pescatarian"
+    elif cooking.lower() == "pescatarian":
+        roasted = "You selected Pescatarian"
         cursor.execute("""
-        UPDATE game_food
-        SET quantity_remaining = quantity_remaining - 1
-        WHERE food_name = 'pescao' AND quantity_remaining >= 1;
-
-        UPDATE game_food
-        SET quantity_remaining = quantity_remaining - 1
-        WHERE food_name = 'Apple' AND quantity_remaining >= 1;
+            UPDATE game_food
+            SET quantity_remaining = quantity_remaining - 1
+            WHERE food_name = 'pescao' AND quantity_remaining >= 1;
+        """)
+        cursor.execute("""
+            UPDATE game_food
+            SET quantity_remaining = quantity_remaining - 1
+            WHERE food_name = 'Apple' AND quantity_remaining >= 1;
         """)
         if cursor.rowcount == 0:
-            print("You can't cook that! Not enough 'Apple or Fish' available.")
-        # AÑADIR PESCATARIAN
+            print("You can't cook that! Not enough 'Fish and Apple' available.")
+        #AÑADIR ENSALADA
         cursor.execute("""
         UPDATE game_food
         SET quantity_remaining = quantity_remaining + 1
-        WHERE food_name = 'pescatarian' AND quantity_remaining >= 0;
-        """)
-    elif cooking == "roasted":
+        WHERE food_name = 'pescatarian';""")
+        #ROASTED
+    elif cooking.lower() == "roasted":
         roasted = "You selected Roasted"
         cursor.execute("""
-        UPDATE game_food
-        SET quantity_remaining = quantity_remaining - 1
-        WHERE food_name = 'Meat' AND quantity_remaining >= 1;
-
-        UPDATE game_food
-        SET quantity_remaining = quantity_remaining - 1
-        WHERE food_name = 'Apple' AND quantity_remaining >= 1;
+            UPDATE game_food
+            SET quantity_remaining = quantity_remaining - 1
+            WHERE food_name = 'Meat' AND quantity_remaining >= 1;
+        """)
+        cursor.execute("""
+            UPDATE game_food
+            SET quantity_remaining = quantity_remaining - 1
+            WHERE food_name = 'Apple' AND quantity_remaining >= 1;
         """)
         if cursor.rowcount == 0:
             print("You can't cook that! Not enough 'Apple or Meat' available.")
         # AÑADIR ROASTED
         cursor.execute("""
-        UPDATE game_food
-        SET quantity_remaining = quantity_remaining + 1
-        WHERE food_name = 'roasted' AND quantity_remaining >= 0;
+            UPDATE game_food
+            SET quantity_remaining = quantity_remaining + 1
+            WHERE food_name = 'roasted' AND quantity_remaining >= 0;
         """)
-
-conexion.commit()
-conexion.close()
+    else:
+        print("puta")
 cooking = input("What do you wanna cook?(Salad/Pescatarian/Roasted)")
 cocinar(cooking)
+conexion.commit()
+conexion.close()
+

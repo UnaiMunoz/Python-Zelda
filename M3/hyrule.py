@@ -1,6 +1,12 @@
 import os
 import random
+import mysql.connector
 
+conexion = mysql.connector.connect(user='root', password='david',
+                                   host='localhost',
+                                   database='Zelda')
+
+cursor = conexion.cursor()
 def clearScreen():
     sistema_operativo = os.name
     if sistema_operativo == 'posix':
@@ -52,7 +58,7 @@ def move_character(map, position, direccion):
         return False
 
     if 0 <= new_position[0] < len(map) and 0 <= new_position[1] < len(map[0]):
-        if map[new_position[0]][new_position[1]] not in ['#', 'O', 'T', 'C', 'S1?',  'S1 ', 'S0?', 'S0 ', 'M', 'F', '1', 'E9', '0', '~', '*']:
+        if map[new_position[0]][new_position[1]] not in ['#', 'O', 'T', 'C', 'S1?',  'S1 ', 'S0?', 'S0 ', 'M', 'F', '1', 'E9', '0', '~', '*','E1']:
             map[position[0]][position[1]] = ' '
             map[new_position[0]][new_position[1]] = 'X'
             return True
@@ -76,6 +82,15 @@ def special_symbols(map, new_position):
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'S1?':
                 interactuar_santuario1(map, character_position)
 
+
+def obtener_manzana():
+    cursor.execute("""
+    UPDATE game_food
+    SET quantity_remaining = quantity_remaining + 1
+    WHERE food_name = 'Apple';""")
+    conexion.commit()
+    addText('Obtuviste una manzana')
+
 def hit_tree(map, new_position):
     for i in range(-1, 2):
         for j in range(-1, 2):
@@ -84,10 +99,9 @@ def hit_tree(map, new_position):
             if 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'T':
                 hit = input("¿Quieres golpear este árbol?: ")                               
                 if hit.lower() == 'yes':
-                    probability = random.randint(1, 10)
-                    
+                    probability = random.randint(1, 10) 
                     if probability in [1, 2, 3, 4]:
-                        addText('Obtuviste una manzana')
+                        obtener_manzana()
                     elif probability == 5:
                         addText('Obtuviste una espada')
                     else:
@@ -252,5 +266,5 @@ while True:
 
     else:
         addText("No puedes moverte en esa dirección o has alcanzado el límite del mapa.")
-
+conexion.close()
 print("Juego terminado.")
