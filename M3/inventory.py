@@ -8,6 +8,18 @@ cursor = conexion.cursor()
 
 max_hearts = 3
 
+def vida_total():
+    cursor.execute("""
+        SELECT max_hearts FROM game
+    """)
+    corazones_totales = cursor.fetchone()
+    if corazones_totales:
+        return corazones_totales[0]
+    else:
+        return 0
+
+
+
 def vida():
     cursor.execute("""
         SELECT hearts_remaining FROM game
@@ -80,13 +92,13 @@ def menu(opcio):
 inventory = (f"""
 * * * * * Inventory * * * * * * Weapons * * * * * *  Food *
 *                   *                   *                 *
-* Link        ♥ {vida()}/{max_hearts} *                   *                 *
+* Link        ♥ {vida()}/{vida_total()} *                   *                 *
 *                   * Wood Sword    5/2 * Vegetables {vegetables()}    *
 * Equipment         *  (equiped)        * Fish {pescao()}          *
 *        Wood Sword * Sword         9/1 * Meat {zorrito()}          *
 *            Shield *                   *                 *
 *                   * Wood Shield   5/0 * Salads          *
-* Food         {total_comida()}   *                   * Pescatarian     *
+* Food         {total_comida()}   *                    * Pescatarian     *
 * Weapons      {contar_armas()}    * Shield        9/2 * Roasted         *
 *                   *  (equiped)        *                 *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

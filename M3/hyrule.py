@@ -66,25 +66,104 @@ def move_character(map, position, direccion):
     
     return False
 
-def invocar_cocinar(cook):
-    from cocinar import cocinar
 
-def cook():
+def cook(cooking):
+    if cooking.lower() == "salad":
+        addText("You selected Salad")
+        cursor.execute("""
+        UPDATE game_food
+        SET quantity_remaining = quantity_remaining - 2
+        WHERE food_name = 'Apple' AND quantity_remaining >= 2;""")
+        if cursor.rowcount == 0:
+            addText("You can't cook that! Not enough 'Apple' available.")
+        else:
+        #AÑADIR ENSALADA
+            cursor.execute("""
+            UPDATE game_food
+            SET quantity_remaining = quantity_remaining + 1
+            WHERE food_name = 'Salad';""")
+        #PESCADO
+    elif cooking.lower() == "pescatarian":
+        addText("You selected Pescatarian")
+        cursor.execute("""
+            SELECT
+                (SELECT quantity_remaining FROM game_food WHERE food_name = 'Apple' AND quantity_remaining >= 1) AS check_manzanas,
+                (SELECT quantity_remaining FROM game_food WHERE food_name = 'pescao' AND quantity_remaining >= 1) AS check_pescado;
+        """)
+        check_comida = cursor.fetchone()
+        check_manzanas = check_comida[0]
+        check_pescado = check_comida[1]
+        
+        if check_manzanas is not None and check_manzanas >= 1 and check_pescado is not None and check_pescado >= 1:
+            cursor.execute("""
+                UPDATE game_food
+                SET quantity_remaining = quantity_remaining - 1
+                WHERE food_name IN ('pescao', 'Apple') AND quantity_remaining >= 1;
+            """)
+            
+            cursor.execute("""
+                UPDATE game_food
+                SET quantity_remaining = quantity_remaining + 1
+                WHERE food_name = 'pescatarian';
+            """)
+        else:
+            addText("You can't cook that! Not enough 'Apple' or 'Fish' available.")
+
+        #ROASTED
+    elif cooking.lower() == "roasted":
+        addText("You selected roasted")
+        cursor.execute("""
+            SELECT
+                (SELECT quantity_remaining FROM game_food WHERE food_name = 'Apple' AND quantity_remaining >= 1) AS check_manzanas,
+                (SELECT quantity_remaining FROM game_food WHERE food_name = 'meat' AND quantity_remaining >= 1) AS check_meat;
+        """)
+        check_comida = cursor.fetchone()
+        check_manzanas = check_comida[0]
+        check_carne = check_comida[1]
+        
+        if check_manzanas is not None and check_manzanas >= 1 and check_carne is not None and check_carne >= 1:
+            cursor.execute("""
+                UPDATE game_food
+                SET quantity_remaining = quantity_remaining - 1
+                WHERE food_name IN ('Meat', 'Apple') AND quantity_remaining >= 1;
+            """)
+            
+            cursor.execute("""
+                UPDATE game_food
+                SET quantity_remaining = quantity_remaining + 1
+                WHERE food_name = 'roasted';
+            """)
+        else:
+            addText("You can't cook that! Not enough 'Apple' or 'Meat' available.")
+        addText("You cant cook that!!!")
+
+
+def pescar():
     while True:
-        cocinando = input("Quieres cocinar?")
-        if cocinando.lower() == "yes":
-            addText("You are cooking")
-            print(menu_cocina)
+        clearScreen()
+        print("* Hyrule  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+        print_map(map)
+        print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+        print_map(inventario)
+
+        showPrompt()
+
+        cocinando = input("¿Quieres pescar? (s/n): ")
+        if cocinando.lower() == "s":
+            addText("Estás pescando.")
             showPrompt()
-            invocar_cocinar()
-        elif cocinando.lower() == "no":
+            probability = random.randint(1, 10) 
+            if probability in [1, 2]:
+                obtener_pescao()
+            else:
+                addText('No has pescado nada')
+
+        elif cocinando.lower() == "n":
+            addText("Decidiste no pescar.")
             break
         else:
-            addText("You don't write it properly")
-            print(menu_cocina)
+            addText("Entrada no válida. Por favor, responde con 's' o 'n'.")
             showPrompt()
-            invocar_cocinar()
-    
 
 def special_symbols(map, new_position):
     for i in range(-1, 2):
@@ -92,7 +171,28 @@ def special_symbols(map, new_position):
             row = new_position[0] + i
             column = new_position[1] + j
             if 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'C':
-                return
+                opcioncocina = input("Quieres cocinar? (yes/exit): ")
+                while opcioncocina == "yes":
+                    clearScreen()
+                    print(menu_cocina)
+                    addText("You're cooking!")
+                    showPrompt()
+                    cooking = input("What do you wanna cook?(Salad/Pescatarian/Roasted)")
+                    cook(cooking)
+                    opcioncocina = input("Quieres cocinar? (yes/No): ")
+                    print(menu_cocina)
+                if opcioncocina.lower() =="exit":
+                    addText("You're no longer cooking")
+                    break
+                else:
+                    addText("This receipt isn't available or you wrote an incorrect order")
+                    opcioncocina = input("Quieres cocinar? (yes/No): ")
+                    clearScreen()
+                    addText("You're cooking again!")
+                    print(menu_cocina)
+                    showPrompt()
+                    cooking = input("What do you wanna cook?(Salad/Pescatarian/Roasted)")
+                    cook(cooking)                    
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'T':
                 addText("Puedes golpear este árbol")
                 hit_tree(map, new_position)
@@ -102,6 +202,8 @@ def special_symbols(map, new_position):
                 interactuar_santuario0(map, character_position)
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'S1?':
                 interactuar_santuario1(map, character_position)
+            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == '~':
+                pescar()
 
 
 def obtener_manzana():
@@ -111,6 +213,16 @@ def obtener_manzana():
     WHERE food_name = 'Apple';""")
     conexion.commit()
     addText('Obtuviste una manzana')
+
+def obtener_pescao():
+    cursor.execute("""
+    UPDATE game_food
+    SET quantity_remaining = quantity_remaining + 1
+    WHERE food_name = 'pescao';""")
+    conexion.commit()
+    addText('Has pescado un pez')
+
+
 
 def hit_tree(map, new_position):
     for i in range(-1, 2):
@@ -219,9 +331,93 @@ def show_map(map_zelda):
 foxlist = [" ", "F"]
 fox_spawn = random.choice(foxlist)
 
+
+def vida_total():
+    cursor.execute("""
+        SELECT max_hearts FROM game
+    """)
+    corazones_totales = cursor.fetchone()
+    if corazones_totales:
+        return corazones_totales[0]
+    else:
+        return 0
+
+
+def vida():
+    cursor.execute("""
+        SELECT hearts_remaining FROM game
+    """)
+    corazones = cursor.fetchone()
+    if corazones:
+        return corazones[0]
+    else:
+        return 0
+def vegetal():
+    from inventory import vegetables
+def armas():
+    cursor.execute("""
+    SELECT COUNT(weapon_name) AS total_quantity
+FROM game_weapons; 
+    """)
+    contar = cursor.fetchone()
+    if contar:
+        return contar[0]
+    else:
+        return 0
+def blood_moon():
+    cursor.execute("""
+        SELECT blood_moon_countdown FROM game;
+    """)
+    lunaroja = cursor.fetchone()
+    if lunaroja:
+        return lunaroja[0]
+    else:
+        return 0
+def contar_comida():
+    cursor.execute("""SELECT SUM(quantity_remaining) AS total_quantity
+FROM game_food;""")
+    comida = cursor.fetchone()
+    if comida:
+        return comida[0]
+    else:
+        return 0
+
+def espada(cursor):
+    cursor.execute("""
+    SELECT quantity_remaining FROM game_weapons
+    WHERE weapon_name = 'Sword'
+    """)
+    result = cursor.fetchone()
+    return result[0] if result else None  # Return the quantity or None if no result
+
+def escudo(cursor):
+    cursor.execute("""
+    SELECT quantity_remaining FROM game_weapons
+    WHERE weapon_name = 'Shield'
+    """)
+    result = cursor.fetchone()
+    return result[0] if result else None
+
+inventario = (f"""
+* * * * * Inventory *
+*                   *
+* Link        ♥ {vida()}/{vida_total()} *
+* Blood moon in {blood_moon()}  *
+*                   *
+* Equipment         *
+*   Sword: {espada(cursor)}        * 
+*   Shield: {escudo(cursor)}       *
+*                   *
+* Food:     {contar_comida()}       *
+* Weapons:  {armas()}       *
+* * * * * * * * * * *
+
+
+""")
+
 map = [   ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', 'O', 'O', 'O', '*'],
           ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', 'O', 'O', '~', 'O', 'O', 'O', 'O', '~', '*'],
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '*'],
+          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '*',],
           ['*', ' ', ' ', ' ', ' ', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '*'],
           ['*', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E9', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],
           ['*', '', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'S0?', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],
@@ -229,6 +425,7 @@ map = [   ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
           ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],
           ['*', ' ', 'O', 'O', ' ', ' ', ' ', ' ', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'S1?', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T', 'M', ' ', ' ', ' ', ' ', ' ', ' ', f'{fox_spawn}', ' ', ' ', ' *'],
           ['*', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*']]
+
 
 map_zelda = ("""
 * Map * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

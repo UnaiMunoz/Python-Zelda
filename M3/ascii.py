@@ -1,5 +1,11 @@
 import random
 
+import mysql.connector
+
+conexion = mysql.connector.connect(user='root', password='david',
+                                   host='localhost',
+                                   database='Zelda')
+cursor = conexion.cursor()
 menu1 = ("""
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *                                                             ##              *
@@ -186,6 +192,93 @@ game = ("""
 """)
 
 
+max_hearts = 3
+
+def vida_total():
+    cursor.execute("""
+        SELECT hearts_max FROM game
+    """)
+    corazones_totales = cursor.fetchone()
+    if corazones_totales:
+        return corazones_totales[0]
+    else:
+        return 0
+
+
+def vida():
+    cursor.execute("""
+        SELECT hearts_remaining FROM game
+    """)
+    corazones = cursor.fetchone()
+    if corazones:
+        return corazones[0]
+    else:
+        return 0
+def vegetal():
+    from inventory import vegetables
+def armas():
+    cursor.execute("""
+    SELECT COUNT(weapon_name) AS total_quantity
+FROM game_weapons; 
+    """)
+    contar = cursor.fetchone()
+    if contar:
+        return contar[0]
+    else:
+        return 0
+def blood_moon():
+    cursor.execute("""
+        SELECT blood_moon_countdown FROM game;
+    """)
+    lunaroja = cursor.fetchone()
+    if lunaroja:
+        return lunaroja[0]
+    else:
+        return 0
+def contar_comida():
+    cursor.execute("""SELECT SUM(quantity_remaining) AS total_quantity
+FROM game_food;""")
+    comida = cursor.fetchone()
+    if comida:
+        return comida[0]
+    else:
+        return 0
+
+def espada(cursor):
+    cursor.execute("""
+    SELECT quantity_remaining FROM game_weapons
+    WHERE weapon_name = 'Sword'
+    """)
+    result = cursor.fetchone()
+    return result[0] if result else None  # Return the quantity or None if no result
+
+def escudo(cursor):
+    cursor.execute("""
+    SELECT quantity_remaining FROM game_weapons
+    WHERE weapon_name = 'Shield'
+    """)
+    result = cursor.fetchone()
+    return result[0] if result else None
+
+inventario = (f"""
+* * * * * Inventory *
+*                   *
+* Link        ♥ {vida()}/{max_hearts} *
+* Blood moon in {blood_moon()}  *
+*                   *
+* Equipment         *
+*   Sword: {espada(cursor)}        * 
+*   Shield: {escudo(cursor)}       *
+*                   *
+* Food:     {contar_comida()}       *
+* Weapons:  {armas()}       *
+* * * * * * * * * * *
+
+
+""")
+print(inventario)
+conexion.close()
+
 help_inventory = ("""
 * Help, inventory * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *        Type 'show inventory main' to show the main inventory                *
@@ -324,7 +417,7 @@ menu_cocina = ("""
 
 
 
-for lista in map:
-    for elemento in lista:
-        print(elemento, end=' ')
-    print()  # Agrega un salto de línea después de imprimir cada lista
+#for lista in map:
+ #   for elemento in lista:
+  #      print(elemento, end=' ')
+   # print()  # Agrega un salto de línea después de imprimir cada lista
