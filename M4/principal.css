@@ -133,3 +133,41 @@ footer {
     width: 100%;
     height: 100%;
 }
+
+#nueva-seccion article {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.personaje {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 5px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.personaje img {
+    max-width: 100%;
+    max-height: 100%; /* Asegura que la imagen no exceda el límite del contenedor */
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+}
+
+.personaje:hover {
+    border-color: #68c3a3;
+}
+
+.personaje h3 {
+    margin: 5px 0;
+    font-size: 1em;
+    color: #333;
+}
+
+.personaje p {
+    font-size: 0.8em;
+    color: #666;
+}

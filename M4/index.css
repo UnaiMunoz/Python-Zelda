@@ -328,4 +328,19 @@ header {
     padding: 10px;
     border-radius: 10px;
   }
+
   
+  .contenedor {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.imagen-movil {
+    width: 100px; /* Ajusta el tamaño de la imagen según tus necesidades */
+    height: auto;
+}
+
+
+
