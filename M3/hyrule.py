@@ -69,7 +69,6 @@ def move_character(map, position, direccion):
 def invocar_cocinar(cook):
     from cocinar import cocinar
 
-
 def special_symbols(map, new_position):
     for i in range(-1, 2):
         for j in range(-1, 2):
@@ -77,17 +76,17 @@ def special_symbols(map, new_position):
             column = new_position[1] + j
             if 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'C':
                 while True:
-                    modococinar = input("¿Quieres cocinar? (Yes/No): ").lower()
-                    if modococinar == "yes":
-                        clearScreen()
-                        print(menu_cocina)
-                        opcion_cocina = "Cargando platos..."
-                        invocar_cocinar(opcion_cocina)
-                    elif modococinar == "no":
-                        break
-                    else:
-                        print("Respuesta inválida. Por favor, ingresa 'Yes' o 'No'.")
-                                    
+                        cocinando = input("Quieres cocinar?")
+                        if cocinando == "yes":
+                            print(menu_cocina)
+                            opcion_cocina = "Cargando platos..."
+                            invocar_cocinar(opcion_cocina)                 
+                            cocinando = input("Quieres cocinar?")
+                            clearScreen()
+                            invocar_cocinar(opcion_cocina)    
+                            break             
+                else:
+                    break
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'T':
                 addText("Puedes golpear este árbol")
                 hit_tree(map, new_position)
