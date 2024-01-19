@@ -1,6 +1,7 @@
 import os
 import random
 import mysql.connector
+from ascii import menu_cocina
 conexion = mysql.connector.connect(user='root', password='david',
                                    host='localhost',
                                    database='Zelda')
@@ -13,7 +14,7 @@ def clearScreen():
         os.system('clear')
     elif sistema_operativo == 'nt':
         os.system('cls')
-
+clearScreen()
 prompt_historial = []
 lives_character = 3
 sword_usos = 4 
@@ -64,18 +65,29 @@ def move_character(map, position, direccion):
             return True
     
     return False
-def summon_cocina(cocina):
+
+def invocar_cocinar(cook):
     from cocinar import cocinar
 
+
 def special_symbols(map, new_position):
-     for i in range(-1, 2):
+    for i in range(-1, 2):
         for j in range(-1, 2):
             row = new_position[0] + i
             column = new_position[1] + j
             if 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'C':
-                cooking = input("What do you wanna cook?(Salad/Pescatarian/Roasted)")
-                addText("Puedes cocinar aquí")
-                summon_cocina(cooking)  
+                while True:
+                    modococinar = input("¿Quieres cocinar? (Yes/No): ").lower()
+                    if modococinar == "yes":
+                        clearScreen()
+                        print(menu_cocina)
+                        opcion_cocina = "Cargando platos..."
+                        invocar_cocinar(opcion_cocina)
+                    elif modococinar == "no":
+                        break
+                    else:
+                        print("Respuesta inválida. Por favor, ingresa 'Yes' o 'No'.")
+                                    
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'T':
                 addText("Puedes golpear este árbol")
                 hit_tree(map, new_position)
