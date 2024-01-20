@@ -36,7 +36,19 @@ for _ in range(3):
 
 #Abrir cofres por zonas
 
+cofres_abiertos = set()
+
 def abrir_cofre(zona):
+    global cofres_abiertos
+
+    if zona not in ["HYRULE", "Geruldo", "DeathMountain", "Neucalda"]:
+        print("Zona no válida")
+        return None
+
+    if zona in cofres_abiertos:
+        print("El cofre en esta zona ya está abierto.")
+        return None
+
     if zona in ["HYRULE", "Geruldo"]:
         opciones_espadas = ["espada_madera", "espada_generica"]
         objeto_obtenido = random.choice(opciones_espadas)
@@ -46,16 +58,12 @@ def abrir_cofre(zona):
     else:
         objeto_obtenido = None  # Manejar el caso de una zona no válida
 
+    cofres_abiertos.add(zona)
+    print(f"Has abierto el cofre en {zona}. ¡Obtuviste: {objeto_obtenido}!")
     return objeto_obtenido
 
-"""
-zona_hyrule = "HYRULE"
-zona_death_mountain = "DeathMountain"
+def resetear_cofres():
+    global cofres_abiertos
+    cofres_abiertos = set()
+    print("Todos los cofres han sido reseteados. ¡Puedes abrirlos de nuevo!")
 
-objeto_en_hyrule = abrir_cofre(zona_hyrule)
-objeto_en_death_mountain = abrir_cofre(zona_death_mountain)
-
-print(f"Objeto en Hyrule: {objeto_en_hyrule}")
-print(f"Objeto en Death Mountain: {objeto_en_death_mountain}")
-
-"""
