@@ -3,112 +3,40 @@ import mysql.connector
 conexion = mysql.connector.connect(user='root', password='david',
                                    host='localhost',
                                    database='Zelda')
+
 cursor = conexion.cursor()
 
+def armas_db(weapon):
+    cursor.execute(f"SELECT quantity_remaining, equiped, lives_remaining FROM game_weapons WHERE weapon_name='{weapon}'")
+    armas = cursor.fetchone()
+    return armas
 
-max_hearts = 3
+def equipped(weapon):
+    armas = armas_db(weapon)[1]
+    if armas == 1:
+        return "(equipped)"
+    elif armas == 0:
+        return "        "
 
-def vida_total():
-    cursor.execute("""
-        SELECT max_hearts FROM game
-    """)
-    corazones_totales = cursor.fetchone()
-    if corazones_totales:
-        return corazones_totales[0]
-    else:
-        return 0
+def quantity(weapon):
+    armas = armas_db(weapon)
+    return armas[0] if armas else None
 
+def durability(weapon):
+    armas = armas_db(weapon)
+    return armas[2] if armas else None
 
-
-def vida():
-    cursor.execute("""
-        SELECT hearts_remaining FROM game
-    """)
-    corazones = cursor.fetchone()
-    if corazones:
-        return corazones[0]
-    else:
-        return 0
-def vegetables():
-    cursor.execute("""
-        SELECT quantity_remaining FROM game_food
-        WHERE game_id = 1 AND food_name = 'Apple'
-        LIMIT 1
-    """)
-    vegetal = cursor.fetchone()
-    if vegetal:
-        return vegetal[0]
-    else:
-        return 0
-
-def pescao():
-    cursor.execute("""
-        SELECT quantity_remaining FROM game_food
-        WHERE game_id = 1 AND food_name = 'Pescao'
-        LIMIT 1
-    """)
-    vegetal = cursor.fetchone()
-    if vegetal:
-        return vegetal[0]
-    else:
-        return 0
-
-def zorrito():
-    cursor.execute("""
-        SELECT quantity_remaining FROM game_food
-        WHERE game_id = 1 AND food_name = 'Meat'
-        LIMIT 1
-    """)
-    vegetal = cursor.fetchone()
-    if vegetal:
-        return vegetal[0]
-    else:
-        return 0
-
-
-
-def total_comida():
-    cursor.execute("""SELECT SUM(quantity_remaining) AS total_quantity
-FROM game_food;""")
-    comida = cursor.fetchone()
-    if comida:
-        return comida[0]
-    else:
-        return 0
-def contar_armas():
-    cursor.execute("""
-    SELECT COUNT(weapon_name) AS total_quantity
-FROM game_weapons; 
-    """)
-    contar = cursor.fetchone()
-    if contar:
-        return contar[0]
-    else:
-        return 0
-def menu(opcio):
-    if opcio == "Show inventory main":
-        print(inventory)
-
-inventory = (f"""
-* * * * * Inventory * * * * * * Weapons * * * * * *  Food *
-*                   *                   *                 *
-* Link        ♥ {vida()}/{vida_total()} *                   *                 *
-*                   * Wood Sword    5/2 * Vegetables {vegetables()}    *
-* Equipment         *  (equiped)        * Fish {pescao()}          *
-*        Wood Sword * Sword         9/1 * Meat {zorrito()}          *
-*            Shield *                   *                 *
-*                   * Wood Shield   5/0 * Salads          *
-* Food         {total_comida()}   *                    * Pescatarian     *
-* Weapons      {contar_armas()}    * Shield        9/2 * Roasted         *
-*                   *  (equiped)        *                 *
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+print(f"""
+* * * * * * Weapons *
+*                   *                  
+*                   *
+* Wood Sword    {durability("Wood Sword")}/{quantity("Wood Sword")} *
+*  {equipped("Wood Sword")}         *
+* Sword         {durability("Sword")}/{quantity("Sword")} *
+*  {equipped("Sword")}         *
+* Wood Shield   {durability("Wood Shield")}/{quantity("Wood Shield")} *
+*  {equipped("Wood Shield")}         *
+* Shield        {durability("Shield")}/{quantity("Shield")} *
+*  {equipped("Shield")}       *
+* * * * * * * * * * *
 """)
-
-
-
-
-
-#opcio = input("What do you want to do?")
-#menu(opcio)
-print(inventory)
-conexion.close()
