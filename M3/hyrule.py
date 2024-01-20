@@ -163,6 +163,35 @@ def pescar():
             addText("Entrada no válida. Por favor, responde con 's' o 'n'.")
             showPrompt()
 
+def swing_sword(character_position):
+    global sword_usos
+    global lives_character
+
+    if sword_usos > 0:
+        sword_usos -= 1  # Reduce the sword's usage
+
+        # Simulate a 10% chance of killing a lizard and obtaining 1 meat
+        probability = random.randint(1, 10)
+        if probability == 1:
+            addText("You swung your sword and killed a lizard!")
+            cursor.execute("""
+                UPDATE game_food
+                SET quantity_remaining = quantity_remaining + 1
+                WHERE food_name = 'meat';
+            """)
+            conexion.commit()
+            addText("You obtained 1 unit of meat.")
+        else:
+            addText("You swung your sword, but missed. The lizard bit you!")
+            # The character loses a life point
+            if lives_character > 0:
+                lives_character -= 1
+                addText(f'Be careful, Link! You now have {lives_character} lives left.')
+                if lives_character == 0:
+                    addText('Game Over!')
+    else:
+        addText('Your sword is too worn out. Find another one.')
+
 def special_symbols(map, new_position):
     for i in range(-1, 2):
         for j in range(-1, 2):
@@ -202,6 +231,10 @@ def special_symbols(map, new_position):
                 interactuar_santuario1(map, character_position)
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == '~':
                 pescar()
+            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == ' ':
+                    attack_input = input("Type 'attack' to swing your sword: ")
+                    if attack_input.lower() == 'attack':
+                        swing_sword(character_position)  # Pass the character_position to swing_sword
 
 
 def obtener_manzana():
@@ -480,34 +513,5 @@ while True:
     else:
         addText("Entrada no válida. Intenta de nuevo.")
 
-#NUEVA FUNCION DE LA LAGARTIJA
-def swing_sword():
-    global sword_usos
-    global lives_character
-
-    if sword_usos > 0:
-        sword_usos -= 1  # Reduce the sword's usage
-
-        # Simulate a 10% chance of killing a lizard and obtaining 1 meat
-        probability = random.randint(1, 10)
-        if probability == 1:
-            addText("You swung your sword in the air and killed a lizard!")
-            cursor.execute("""
-                UPDATE game_food
-                SET quantity_remaining = quantity_remaining + 1
-                WHERE food_name = 'meat';
-            """)
-            conexion.commit()
-            addText("You obtained 1 unit of meat.")
-        else:
-            addText("You swung your sword in the air, but missed. The lizard bit you!")
-            # The character loses a life point
-            if lives_character > 0:
-                lives_character -= 1
-                addText(f'Be careful, Link! You now have {lives_character} lives left.')
-                if lives_character == 0:
-                    addText('Game Over!')
-    else:
-        addText('Your sword is too worn out. Find another one.')
 conexion.close()
 print("Juego terminado.")
