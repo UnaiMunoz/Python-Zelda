@@ -1,78 +1,116 @@
+import random
+import os
 
+def clearScreen():
+    sistema_operativo = os.name
 
+    if sistema_operativo == 'posix':  # Para sistemas basados en Unix/Linux/Mac
+        os.system('clear')
+    elif sistema_operativo == 'nt':  # Para sistemas Windows
+        os.system('cls')
 
-castle = [['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],
-          ['*', ' ', ' ', ' ', '\\', '|', '/', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],
-          ['*', ' ', ' ', '', '--', 'o', '--', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],                 
-          ['*', ' ', ' ', ' ', '/', '|', '\\', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],                
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', '>', ' ', ' ', 'v', '-', 'v', '-', 'v', '-', 'v', ' ', ' ', ' ', '|', '>', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],                
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ',', ' ', ' ', ' ', ',', ' ', ' ', '/', '_', '\\', ' ', ' ', '|', ' ', ' ', ' ', ' ', ' ', '|', ' ', ' ', '/', '_', '\\ ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '', '*'],
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', '\\', '_', '/', '|', ' ', ' ', '|', ' ', '|', "'", "'", "'", "'", "'", "'", "'", "'", "'", "'", "'", '|', ' ', '|', "'", '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],                
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '(', 'q', ' ', 'p', ')', ',', '-', '|', ' ', '|', ' ', '|', '|', ' ', ' ', '_', ' ', ' ', '|', '|', ' ', '|', ' ', '|', ' ', ' ', 'Â·', '_', ' ', ' ', '|', '\\', ' ', ' ', ' ', '', '*'],
-          ['*', 'O', 'T', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\\', '_', '/', '_', '(', '/', '|', ' ', '|', ' ', ' ', ' ', ' ', '|', '#', '|', ' ', ' ', ' ', ' ', '|', ' ', '|', ' ', ')', ' ', ' ', "'", '-', '/', '/', ' ', ' ', ' ', ' ', '*'],
-          ['*', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', '*']
-]
+prompt_historial = []
 
+def addText(texto):
+    prompt_historial.append(texto)
 
+    if len(prompt_historial) > 8:
+        prompt_historial.pop(0)
+
+def showPrompt():
+    if prompt_historial:
+        print("Latest actions: ")
+        for prompt in prompt_historial:
+            print("->" + " " + prompt)
+    else:
+        print("There are no actions yet")
 # Función para imprimir la matriz en el prompt
 def imprimir_matriz(matriz):
     for fila in matriz:
         print(''.join(fila))
-    print()
 
-# Coordenadas iniciales del jugador X
-posicion_x = [8, 3]
+def encontrar_personaje(mapa, simbolo):
+    for i in range(len(mapa)):
+        for j in range(len(mapa[i])):
+            if mapa[i][j] == simbolo:
+                return i, j
 
-# Coordenadas del dragón
-posicion_dragon = [8, 21]
+vidas_ganon = 8
 
-# Número de golpes restantes para matar al dragón
-golpes_restantes = 8
+ganonlist = ["Ganon is powerful, are you sure you can defeat him?",
+"Ganon's strength is supernatural, Zelda fought with bravery.",
+"To Ganon, you are like a fly, find a weak spot and attack.",
+"Ganon will not surrender easily.",
+"Ganon has fought great battles, is an expert fighter.",
+"Link, transform your fears into strengths.",
+"Keep it up, Link, Ganon can't hold out much longer.",
+"Link, history repeats itself, Ganon can be defeated.",
+"Think of all the warriors who have tried before.",
+"You fight for the weaker ones, Link, persevere."]
+
+ganonsentences = random.choice(ganonlist)
+
+def mover_personaje(mapa, posicion, direccion):
+    global vidas_ganon
+    nueva_posicion = list(posicion)
+
+    if direccion == 'd' and nueva_posicion[1] < len(mapa[0]) - 1:
+        nueva_posicion[1] += 1
+    elif direccion == 'a' and nueva_posicion[1] > 0:
+        nueva_posicion[1] -= 1
+
+
+    if 0 <= nueva_posicion[0] < len(mapa) and 0 <= nueva_posicion[1] < len(mapa[0]):
+        if mapa[nueva_posicion[0]][nueva_posicion[1]] == '\\':  # Corregido aquí
+            atacar_dragon = input("¡Te encuentras cerca de Ganon!! Escribe 'attack' para atacar: ").lower()
+            if atacar_dragon.lower() == 'attack':
+                vidas_ganon -= 1
+                addText(f"{ganonsentences}")
+                addText(f"Feep fighting link, ganon has only {vidas_ganon} lives left")
+                
+                # Actualiza las vidas del dragón y realiza otras acciones necesarias.
+        elif mapa[nueva_posicion[0]][nueva_posicion[1]] not in ['#', 'O', 'T', 'C', 'E', 'S', 'M', 'F', '\\']:
+            mapa[posicion[0]][posicion[1]] = ' '
+            mapa[nueva_posicion[0]][nueva_posicion[1]] = 'X'
+
+            return True
+
+    else:
+        addText("No puedes moverte en esa dirección.")
+        return False
 
 # Matriz del juego
-juego = [['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],
-          ['*', ' ', ' ', ' ', '\\', '|', '/', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],
-          ['*', ' ', ' ', '', '--', 'o', '--', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],                 
-          ['*', ' ', ' ', ' ', '/', '|', '\\', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],                
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', '>', ' ', ' ', 'v', '-', 'v', '-', 'v', '-', 'v', ' ', ' ', ' ', '|', '>', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],                
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ',', ' ', ' ', ' ', ',', ' ', ' ', '/', '_', '\\', ' ', ' ', '|', ' ', ' ', ' ', ' ', ' ', '|', ' ', ' ', '/', '_', '\\ ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '', '*'],
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', '\\', '_', '/', '|', ' ', ' ', '|', ' ', '|', "'", "'", "'", "'", "'", "'", "'", "'", "'", "'", "'", '|', ' ', '|', "'", '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],                
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '(', 'q', ' ', 'p', ')', ',', '-', '|', ' ', '|', ' ', '|', '|', ' ', ' ', '_', ' ', ' ', '|', '|', ' ', '|', ' ', '|', ' ', ' ', 'Â·', '_', ' ', ' ', '|', '\\', ' ', ' ', ' ', '', '*'],
-          ['*', 'O', 'T', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\\', '_', '/', '_', '(', '/', '|', ' ', '|', ' ', ' ', ' ', ' ', '|', '#', '|', ' ', ' ', ' ', ' ', '|', ' ', '|', ' ', ')', ' ', ' ', "'", '-', '/', '/', ' ', ' ', ' ', ' ', '*'],
-          ['*', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', '*']
+mapa = [['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' *'],
+          ['*', ' ', ' ', ' ', '\\', '|', '/', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' *'],
+          ['*', ' ', ' ', '', '--', 'o', '--', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' *'],                 
+          ['*', ' ', ' ', ' ', '/', '|', '\\', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' *'],                
+          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', '>', ' ', ' ', 'v', '-', 'v', '-', 'v', '-', 'v', ' ', ' ', ' ', '|', '>', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' *'],                
+          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ',', ' ', ' ', ' ', ',', ' ', ' ', '/', '_', '\\', ' ', ' ', '|', ' ', ' ', ' ', ' ', ' ', '|', ' ', ' ', '/', '_', '\\ ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '', ' *'],
+          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|', '\\', '_', '/', '|', ' ', ' ', '|', ' ', '|', "'", "'", "'", "'", "'", "'", "'", "'", "'", "'", "'", '|', ' ', '|', "'", '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' *'],                
+          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '(', 'q', ' ', 'p', ')', ',', '-', '|', ' ', '|', ' ', '|', '|', ' ', ' ', '_', ' ', ' ', '|', '|', ' ', '|', ' ', '|', ' ', ' ', 'Â·', '_', ' ', ' ', '|', '\\', ' ', ' ', ' ', '', ' *'],
+          ['*', 'O', 'T', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\\', '_', '/', '_', '(', '/', '|', ' ', '|', ' ', ' ', ' ', ' ', '|', '#', '|', ' ', ' ', ' ', ' ', '|', ' ', '|', ' ', ')', ' ', ' ', "'", '-', '/', '/', ' ', ' ', ' ', ' ', ' *'],
+          ['*', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', ' *']
 ]
 
-# Bucle principal
-while golpes_restantes > 0:
-    # Imprimir el estado actual del juego
-    imprimir_matriz(juego)
+posicion_personaje = encontrar_personaje(mapa, 'X')
 
-    # Solicitar la acción al jugador
-    accion = input("Presiona 'Enter' para moverte hacia adelante o 'g' para golpear al dragón: ")
+while True:
+    clearScreen()
+    print("* Castle  * * * * * * * * * * * * * * * * * * * * * * * ")
+    imprimir_matriz(mapa)
+    print(" * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+    showPrompt()
+    direccion = input("\nHacia adelante Link: ")
 
-    if accion.lower() == 'g':
-        # Verificar si el jugador está al lado del dragón para golpear
-        if abs(posicion_x[1] - posicion_dragon[1]) == 1 and posicion_x[0] == posicion_dragon[0]:
-            golpes_restantes -= 1
-            print("¡Golpeaste al dragón! Quedan {} golpes para matarlo.".format(golpes_restantes))
-        else:
-            print("No estás lo suficientemente cerca del dragón para golpearlo.")
+    if direccion.lower() == 'salir':
+        break
 
-    # Actualizar la posición del jugador
-    nueva_posicion = [posicion_x[0], posicion_x[1] + 1]
+    if mover_personaje(mapa, posicion_personaje, direccion.lower()):
+        posicion_personaje = encontrar_personaje(mapa, 'X')
+        if direccion.lower() == "d":
+            addText("Te has movido hacia la derecha")
+        elif direccion.lower() == "a":
+            addText("Te has movido hacia la izquierda")
+    
 
-    # Verificar si el movimiento es válido
-    if juego[nueva_posicion[0]][nueva_posicion[1]] == ' ':
-        juego[posicion_x[0]][posicion_x[1]] = ' '  # Limpiar la posición actual del jugador
-        posicion_x = nueva_posicion
-        juego[posicion_x[0]][posicion_x[1]] = 'X'
-    else:
-        print("¡No puedes atravesar el obstáculo!")
-
-# Mostrar mensaje de victoria
-print("¡Felicidades! ¡Has derrotado al dragón!")
-
-
-print("\n* Castle  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
-imprimir_matriz(castle)
-print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+print("Juego terminado.")
