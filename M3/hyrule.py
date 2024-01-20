@@ -139,32 +139,36 @@ def cook(cooking):
             addText("You can't cook that! Not enough 'Apple' or 'Meat' available.")
         addText("You cant cook that!!!")
 
-
+pez_pescado = False
 def pescar():
     while True:
+        global pez_pescado
         clearScreen()
         print("* Hyrule  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
         print_map(map)
         print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
         showPrompt()
 
-        cocinando = input("¿Quieres pescar? (s/n): ")
-        if cocinando.lower() == "s":
-            addText("Estás pescando.")
-            showPrompt()
-            probability = random.randint(1, 10) 
-            if probability in [1, 2]:
-                obtener_pescao()
+        if not pez_pescado:  # Verificar si ya se ha pescado un pez en este mapa
+            cocinando = input("¿Quieres pescar? (s/n): ")
+            if cocinando.lower() == "s":
+                addText("Estás pescando.")
+                showPrompt()
+                probability = random.randint(1, 10) 
+                if probability in [1, 2]:
+                    obtener_pescao()  # Reemplaza con la implementación real
+                    pez_pescado = True  # Marcar que se ha pescado un pez
+                else:
+                    addText('No has pescado nada')
+            elif cocinando.lower() == "n":
+                addText("Decidiste no pescar.")
+                break
             else:
-                addText('No has pescado nada')
-
-        elif cocinando.lower() == "n":
-            addText("Decidiste no pescar.")
-            break
+                addText("Entrada no válida. Por favor, responde con 's' o 'n'.")
+                showPrompt()
         else:
-            addText("Entrada no válida. Por favor, responde con 's' o 'n'.")
-            showPrompt()
-
+            addText("Ya has pescado un pez en este mapa.")
+            break
 def swing_sword(character_position):
     global sword_usos
     global lives_character
