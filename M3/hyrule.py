@@ -350,8 +350,7 @@ def vida():
         return corazones[0]
     else:
         return 0
-def vegetal():
-    from inventory import vegetables
+
 def armas():
     cursor.execute("""
     SELECT COUNT(weapon_name) AS total_quantity
@@ -480,5 +479,35 @@ while True:
 
     else:
         addText("Entrada no válida. Intenta de nuevo.")
+
+#NUEVA FUNCION DE LA LAGARTIJA
+def swing_sword():
+    global sword_usos
+    global lives_character
+
+    if sword_usos > 0:
+        sword_usos -= 1  # Reduce the sword's usage
+
+        # Simulate a 10% chance of killing a lizard and obtaining 1 meat
+        probability = random.randint(1, 10)
+        if probability == 1:
+            addText("You swung your sword in the air and killed a lizard!")
+            cursor.execute("""
+                UPDATE game_food
+                SET quantity_remaining = quantity_remaining + 1
+                WHERE food_name = 'meat';
+            """)
+            conexion.commit()
+            addText("You obtained 1 unit of meat.")
+        else:
+            addText("You swung your sword in the air, but missed. The lizard bit you!")
+            # The character loses a life point
+            if lives_character > 0:
+                lives_character -= 1
+                addText(f'Be careful, Link! You now have {lives_character} lives left.')
+                if lives_character == 0:
+                    addText('Game Over!')
+    else:
+        addText('Your sword is too worn out. Find another one.')
 conexion.close()
 print("Juego terminado.")

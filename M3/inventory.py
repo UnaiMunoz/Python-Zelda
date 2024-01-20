@@ -39,4 +39,3 @@ print(f"""
 * Shield        {durability("Shield")}/{quantity("Shield")} *
 *  {equipped("Shield")}       *
 * * * * * * * * * * *
-""")
