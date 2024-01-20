@@ -1,5 +1,5 @@
 body {
-    background-image: url(https://i.blogs.es/15da49/zelda00/1366_2000.jpg);
+    background-image: url(zeldabackground.jpg);
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -10,15 +10,17 @@ body {
 }
 
 body p {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 body h3 {
-    font-family: 'Nerko One', cursive;
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
     font-size: 45px;
 }
 
 body h5 {
-    font-family: 'Nerko One', cursive;
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
     font-size: 20px;
 }

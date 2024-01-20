@@ -2,6 +2,7 @@ body {
     margin: 0;
     padding: 0;
     padding-top: 230px;
+    font-family: 'Poppins', sans-serif;
 }
 
 .autocenter2 {
@@ -16,7 +17,6 @@ body {
     background-color: #353535;
     color: white;
     border-radius: 10px;
-    animation: barra 4s infinite linear;
 }
 
 @keyframes barra {
@@ -84,5 +84,6 @@ body {
 }
 .icono_titulo h1 {
     display: none;
+    font-family: 'Poppins', sans-serif;
 }
 }

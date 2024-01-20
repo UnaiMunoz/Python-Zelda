@@ -6,7 +6,7 @@
     padding-right: 32px;
     padding-bottom: 0px;
     margin-bottom: 0px;
-    max-height: 35px;
+    max-height: auto;
     display: flex;
     width: auto;
     flex-direction: row;

@@ -3,6 +3,11 @@
     top: 0;
     z-index: 3;
 }
+
+body{
+    justify-content: center;
+    align-items: center;
+}
 header {
     text-align: center;
     padding: 20px;
@@ -70,6 +75,7 @@ header {
     box-sizing: border-box;
     margin-left: auto;
     flex-direction: column;
+    text-align: center;
     margin-right: auto;
     max-width: 700px;
     padding-left: 25px;

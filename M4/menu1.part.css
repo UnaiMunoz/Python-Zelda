@@ -28,7 +28,7 @@ body {
     flex-direction: row;
     align-content: center;
     justify-content: space-evenly;
-    font-family: 'Sigmar One', cursive;
+    font-family: 'Poppins', sans-serif;
     font-size: small;
 }
 
