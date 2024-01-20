@@ -350,8 +350,7 @@ def vida():
         return corazones[0]
     else:
         return 0
-def vegetal():
-    from inventory import vegetables
+
 def armas():
     cursor.execute("""
     SELECT COUNT(weapon_name) AS total_quantity
