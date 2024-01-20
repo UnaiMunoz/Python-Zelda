@@ -320,9 +320,13 @@ def hit_tree(map, new_position, espada_count=1):
 
                 turnos += 1  # Incrementar el contador de turnos después de golpear el árbol
 
-    # Verificar si ha pasado el tiempo necesario para que el árbol vuelva a crecer
-
-
+                if talado and turnos >= 10:
+                    map[row][column] = 'T'  
+                    talado = False
+                    turnos = 0
+                    addText('¡El árbol ha vuelto a crecer!')
+                
+            
 
 def attack_enemy(map, position):
     global sword_usos  # Número máximo de usos de la espada
