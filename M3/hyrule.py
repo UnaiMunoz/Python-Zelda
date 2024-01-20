@@ -6,7 +6,9 @@ conexion = mysql.connector.connect(user='root', password='david',
                                    host='localhost',
                                    database='Zelda')
 
-
+turnos = 0
+durabilidad = 4
+talado = False
 cursor = conexion.cursor()
 def clearScreen():
     sistema_operativo = os.name
@@ -42,7 +44,7 @@ def find_link(map, symbol):
 
 def print_map(map):
     for x in map:
-        print(' '.join(x))
+        print(''.join(x))
 
 def move_character(map, position, direccion):
     new_position = list(position)
@@ -59,7 +61,7 @@ def move_character(map, position, direccion):
         return False
 
     if 0 <= new_position[0] < len(map) and 0 <= new_position[1] < len(map[0]):
-        if map[new_position[0]][new_position[1]] not in ['#', 'O', 'T', 'C', 'S1?',  'S1 ', 'S0?', 'S0 ', 'M', 'F', '1', 'E9', '0', '~', '*','E1']:
+        if map[new_position[0]][new_position[1]] not in ['#', 'O', 'T', 'C', 'S1?',  'S1 ', 'S0?', 'S0 ', 'M', 'F', '1', 'E9', '0', '~', '*','E1','t']:
             map[position[0]][position[1]] = ' '
             map[new_position[0]][new_position[1]] = 'X'
             return True
@@ -231,10 +233,8 @@ def special_symbols(map, new_position):
                 interactuar_santuario1(map, character_position)
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == '~':
                 pescar()
-            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == ' ':
-                    attack_input = input("Type 'attack' to swing your sword: ")
-                    if attack_input.lower() == 'attack':
-                        swing_sword(character_position)  # Pass the character_position to swing_sword
+            #elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == ' ':
+             #           swing_sword(character_position) 
 
 
 def obtener_manzana():
@@ -255,21 +255,57 @@ def obtener_pescao():
 
 
 
-def hit_tree(map, new_position):
+talado = False
+
+def hit_tree(map, new_position, espada_count=1):
+    global turnos
+    global durabilidad
+    global talado
+
     for i in range(-1, 2):
         for j in range(-1, 2):
             row = new_position[0] + i
             column = new_position[1] + j   
+
             if 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'T':
-                hit = input("¿Quieres golpear este árbol?: ")                               
-                if hit.lower() == 'yes':
-                    probability = random.randint(1, 10) 
-                    if probability in [1, 2, 3, 4]:
-                        obtener_manzana()
-                    elif probability == 5:
-                        addText('Obtuviste una espada')
-                    else:
-                        addText('No obtuviste nada')
+                hit = input("¿Quieres golpear este árbol? (yes/no): ").lower()
+
+                if hit == 'yes':
+                    probability = random.randint(1, 10)
+
+                    if espada_count > 0:  # Si estás usando una espada
+                        if probability <= 4:  # 40% de obtener manzana
+                            durabilidad = durabilidad - 1
+                            obtener_manzana()  # Replace with actual implementation
+                        elif probability <= 8:  # 20% de obtener espada de madera
+                            durabilidad = durabilidad - 1
+                            addText('Obtuviste una espada de madera')
+                        elif probability <= 10:  # 10% de obtener escudo de madera
+                            durabilidad = durabilidad - 1
+                            addText('Obtuviste un escudo de madera')
+                        else:
+                            durabilidad = durabilidad - 1
+                            addText('No obtuviste nada')
+                    else:  # Si no estás usando una espada
+                        if probability <= 2:  # 20% de obtener manzana
+                            obtener_manzana()  # Replace with actual implementation
+                        elif probability <= 5:  # 30% de obtener espada de madera
+                            addText('Obtuviste una espada de madera')
+                        else:
+                            addText('No obtuviste nada')
+
+                    # Verificar si el árbol debe ser cortado y reiniciar el contador de turnos
+                    if durabilidad == 0:
+                        talado = True
+                        map[row][column] = 't'  # 't' representa un árbol cortado
+                        turnos = 0  # Reiniciar el contador de turnos cuando el árbol es cortado
+                        addText('¡Has cortado el árbol! Volverá a crecer en 10 turnos.')
+
+                turnos += 1  # Incrementar el contador de turnos después de golpear el árbol
+
+    # Verificar si ha pasado el tiempo necesario para que el árbol vuelva a crecer
+
+
 
 def attack_enemy(map, position):
     global sword_usos  # Número máximo de usos de la espada
@@ -471,9 +507,9 @@ def movimiento(map, position, direction, steps):
 
 while True:
     clearScreen()
-    print("* Hyrule  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+    print("* Hyrule * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ")
     print_map(map)
-    print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+    print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
     showPrompt()
     user_input = input("\nMove to?(direction(wasd) number): ")
     user_input = user_input.split()
@@ -497,18 +533,33 @@ while True:
         direction = user_input[0].lower()
         steps = int(user_input[1])
         character_position = movimiento(map, character_position, direction, steps)
-
         if direction == "w":
             addText(f"Te has movido hacia arriba {steps} casillas.")
             special_symbols(map, character_position)
+            if talado == True:
+                turnos = turnos + 1
+                addText(f"llevas {turnos}")
         elif direction == "a":
             addText(f"Te has movido hacia la izquierda {steps} casillas.")
             special_symbols(map, character_position)
+            if talado == True:
+                turnos = turnos + 1 
+                addText(f"llevas {turnos}")
+
         elif direction == "s":
             addText(f"Te has movido hacia abajo {steps} casillas.")
             special_symbols(map, character_position)
+            if talado == True:
+                turnos = turnos + 1
+                addText(f"llevas {turnos}")
+
         elif direction == "d":
             addText(f"Te has movido hacia la derecha {steps} casillas.")
+            if talado == True:
+                turnos = turnos + 1
+                addText(f"llevas {turnos}")
+           
+
 
     else:
         addText("Entrada no válida. Intenta de nuevo.")
