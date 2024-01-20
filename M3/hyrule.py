@@ -253,7 +253,21 @@ def obtener_pescao():
     conexion.commit()
     addText('Has pescado un pez')
 
+def obtener_espadamadera():
+    cursor.execute("""
+    UPDATE game_food
+    SET quantity_remaining = quantity_remaining + 1
+    WHERE food_name = 'wood sword';""")
+    conexion.commit()
+    addText('Obtuviste una espada de madera')
 
+def obtener_escudomadera():
+    cursor.execute("""
+    UPDATE game_food
+    SET quantity_remaining = quantity_remaining + 1
+    WHERE food_name = 'wood shield';""")
+    conexion.commit()
+    addText('Obtuviste un escudo de madera')
 
 talado = False
 
@@ -279,9 +293,11 @@ def hit_tree(map, new_position, espada_count=1):
                             obtener_manzana()  # Replace with actual implementation
                         elif probability <= 8:  # 20% de obtener espada de madera
                             durabilidad = durabilidad - 1
+                            obtener_espadamadera()
                             addText('Obtuviste una espada de madera')
                         elif probability <= 10:  # 10% de obtener escudo de madera
                             durabilidad = durabilidad - 1
+                            obtener_escudomadera()
                             addText('Obtuviste un escudo de madera')
                         else:
                             durabilidad = durabilidad - 1
@@ -290,6 +306,7 @@ def hit_tree(map, new_position, espada_count=1):
                         if probability <= 2:  # 20% de obtener manzana
                             obtener_manzana()  # Replace with actual implementation
                         elif probability <= 5:  # 30% de obtener espada de madera
+                            obtener_espadamadera
                             addText('Obtuviste una espada de madera')
                         else:
                             addText('No obtuviste nada')
