@@ -16,12 +16,11 @@ Exploración Épica: Descubre un mundo expansivo lleno de paisajes pintorescos, 
 
 # Arte y diseño
 
-![image](https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/1beafe20-f100-41a5-b6a4-7aaccd8cecbb)
+<p align="center">
+  <img src="https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/1beafe20-f100-41a5-b6a4-7aaccd8cecbb" alt="Image 1" width="200"/>
+  <img src="https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/cc9a1d7a-88ad-4c2a-a4a6-7ddc5320eec0" alt="Image 2" width="200"/>
+  <img src="https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/039ca7f9-2b4a-44ff-a2f1-21f4081d2e3a" alt="Image 3" width="200"/>
+  <img src="https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/3ac9e771-0de2-49ce-b4e9-3d4b88dfecfc" alt="Image 4" width="200"/>
+  <img src="https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/b5e423eb-d788-426d-860a-2c69e6539768" alt="Image 5" width="200"/>
+</p>
 
-![image](https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/cc9a1d7a-88ad-4c2a-a4a6-7ddc5320eec0)
-
-![image](https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/039ca7f9-2b4a-44ff-a2f1-21f4081d2e3a)
-
-![image](https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/3ac9e771-0de2-49ce-b4e9-3d4b88dfecfc)
-
-![image](https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/b5e423eb-d788-426d-860a-2c69e6539768)
