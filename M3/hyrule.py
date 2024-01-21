@@ -225,7 +225,7 @@ def special_symbols(map, new_position):
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == '~':
                 pescar()
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'M':
-                abrir = input("Quieres abir el cofre?: ")
+                abrir = input("Quieres abrir el cofre?: ")
                 if abrir.lower() == "yes":
                     cofres_objetos.abrir_cofre("hyrule")
 
@@ -678,6 +678,8 @@ while True:
             subir_vida("roasted")
     if user_input.lower() == "attack":
         swing_sword()
+    if user_input.lower() == "cheat":
+        cofres_objetos.cheats()
     user_input = user_input.split()
 
     if user_input[0].lower() == 'show':

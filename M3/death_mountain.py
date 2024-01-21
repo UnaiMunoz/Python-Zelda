@@ -225,9 +225,9 @@ def special_symbols(map, new_position):
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == '~':
                 pescar()
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'M':
-                abrir = input("Quieres abir el cofre?: ")
+                abrir = input("Quieres abrir el cofre?: ")
                 if abrir.lower() == "yes":
-                    cofres_objetos.abrir_cofre("hyrule")
+                    cofres_objetos.abrir_cofre("DeathMountain")
 
 def subir_vida(comida):
     global lives_character

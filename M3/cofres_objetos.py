@@ -62,7 +62,7 @@ cofres_abiertos = set()
 def abrir_cofre(zona):
     global cofres_abiertos
 
-    if zona not in ["hyrule", "Geruldo", "DeathMountain", "Neucalda"]:
+    if zona not in ["hyrule", "Gerudo", "DeathMountain", "necluda"]:
         print("Zona no válida")
         return None
 
@@ -70,27 +70,26 @@ def abrir_cofre(zona):
         print("El cofre en esta zona ya está abierto.")
         return None
 
-    if zona in ["hyrule", "Geruldo"]:
+    if zona in ["hyrule", "Gerudo"]:
         opciones_espadas = ["espada_madera", "espada"]
         objeto_obtenido = random.choice(opciones_espadas)
-    elif zona in ["DeathMountain", "Neucalda"]:
+    elif zona in ["DeathMountain", "necluda"]:
         opciones_escudos = ["escudo", "escudo_madera"]
         objeto_obtenido = random.choice(opciones_escudos)
     else:
         objeto_obtenido = None  # Manejar el caso de una zona no válida
 
     cofres_abiertos.add(zona)
-    print(f"Has abierto el cofre en {zona}. ¡Obtuviste: {objeto_obtenido}!")
+    addText(f"Has abierto el cofre en {zona}. ¡Obtuviste: {objeto_obtenido}!")
     return objeto_obtenido
 
 def resetear_cofres():
     global cofres_abiertos
     cofres_abiertos = set()
-    print("Todos los cofres han sido reseteados. ¡Puedes abrirlos de nuevo!")
+    addText("Todos los cofres han sido reseteados. ¡Puedes abrirlos de nuevo!")
 
 def cheats():
-    global sword_usos
-    global lives_character
+
 
     cheat_input = input("Enter cheat command: ")
 
@@ -102,12 +101,12 @@ def cheats():
             addText("Invalid name. Must be between 3 and 10 characters, and can only contain letters, numbers, and spaces.")
 
     elif cheat_input == "cheat add vegetable":
-        cursor.execute("UPDATE game_food SET quantity_remaining = quantity_remaining + 1 WHERE food_name = 'Vegetable';")
+        cursor.execute("UPDATE game_food SET quantity_remaining = quantity_remaining + 1 WHERE food_name = 'Apple';")
         conexion.commit()
         addText("Added a vegetable to food.")
 
     elif cheat_input == "cheat add fish":
-        cursor.execute("UPDATE game_food SET quantity_remaining = quantity_remaining + 1 WHERE food_name = 'Fish';")
+        cursor.execute("UPDATE game_food SET quantity_remaining = quantity_remaining + 1 WHERE food_name = 'pescao';")
         conexion.commit()
         addText("Added a fish to food.")
 
