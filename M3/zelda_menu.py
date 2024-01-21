@@ -18,8 +18,8 @@ conexion = mysql.connector.connect(user='root', password='david',
 cursor = conexion.cursor()
 hoy = date.today()
 corazones = 3
+corazones_max = 3
 
-id = 0
 def clearScreen():
     sistema_operativo = os.name
 
@@ -44,8 +44,16 @@ def showPrompt():
     else:
         print("There are no actions yet")
 
+def dar_id():
+    cursor.execute('SELECT MAX(game_id) FROM game')
+    ultima = cursor.fetchone()[0]
+    nueva_id = ultima + 1
+    return nueva_id
+
+
+
 def validateName(name):
-    allowed_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
+    allowed_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0º23456789 "
     if all(caracter in allowed_characters for caracter in name):
         if (len(name) >= 3) and (len(name) <= 10):
             return True
@@ -53,8 +61,8 @@ def validateName(name):
         return False    
 def update_nombre(name,id):
     actualizar = (f"""
-            INSERT INTO game (game_id, user_name, date_started, hearts_remaining, blood_moon_countdown, blood_moon_appearances, region_char)
-            VALUES ({id}, '{name}', '{hoy}', {corazones}, 0, 0, 'Hyrule');
+            INSERT INTO game (game_id, user_name, date_started, hearts_remaining, blood_moon_countdown, blood_moon_appearances, region_char,max_hearts)
+            VALUES ({id}, '{name}', '{hoy}', {corazones}, 0, 0, 'Hyrule',{corazones_max});
         """)
     cursor.execute(actualizar)
     conexion.commit()
@@ -93,26 +101,42 @@ def mainmenu():
                         addText("Invalid action")
                 while validateName(option_game) == True and option_game != "Back":
                     clearScreen()
-                    update_nombre(option_game,id + 1)
+                    update_nombre(option_game,dar_id())
                     addText(f'Welcome to the game, "{option_game}"')
                     print(legend)
                     showPrompt()
                     option_legend = input("\nType 'continue' to continue ")
-                    if option_legend == "Continue":
+                    if option_legend.lower() == "continue":
                         clearScreen()
                         addText(option_legend)
                         print(plot)
                         showPrompt()
                         option_plot = input("\nType 'continue' to continue: ")
-                        clearScreen()
-                        import hyrule                           
+                        if option_plot.lower() == "continue":
+                            clearScreen()
+                            import hyrule   
                     else:
                         addText("Invalid action")
 
-                if len(option_game) == "":
+                if option_game == "":
                     option_game = 'link'
+                    clearScreen()
+                    update_nombre(option_game,dar_id())
                     addText(f'Welcome to the game, "{option_game}"')
-
+                    print(legend)
+                    showPrompt()
+                    option_legend = input("\nType 'continue' to continue ")
+                    if option_legend.lower() == "continue":
+                        clearScreen()
+                        addText(option_legend)
+                        print(plot)
+                        showPrompt()
+                        option_plot = input("\nType 'continue' to continue: ")
+                        if option_plot.lower() == "continue":
+                            clearScreen()
+                            import hyrule   
+                    else:
+                        addText("Invalid action")                    
                 elif option_game == "Back":
                     addText(option_game)
                     break
