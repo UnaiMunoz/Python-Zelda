@@ -44,7 +44,7 @@ def find_link(map, symbol):
 
 def print_map(map):
     for x in map:
-        print(' '.join(x))
+        print(''.join(x))
 
 def move_character(map, position, direccion):
     new_position = list(position)
@@ -428,13 +428,25 @@ while True:
     if fox_spawn == "F":
         addText("You see a Fox")
     clearScreen()
-    print("* Hyrule  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+    print("* Gerudo  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ")
     print_map(map)
-    print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+    print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ")
     showPrompt()
     user_input = input("\nMove to?(direction(wasd) number): ")
-    user_input = user_input.split()
+    if user_input.lower() == "hyrule":
+        addText("You travel to Hyrule")
+        import hyrule
 
+    if user_input.lower() == "necluda":
+        addText("You travel to Necluda")
+        import necluda
+
+    if user_input.lower() == "castle":
+        addText("You travel to Castle")
+        import castle
+
+
+    user_input = user_input.split()
     if user_input[0].lower() == 'show':
         addText(user_input[0])
         while True:

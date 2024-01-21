@@ -575,6 +575,17 @@ while True:
     print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
     showPrompt()
     user_input = input("\nMove to?(direction(wasd) number): ")
+    if user_input.lower() == "gerudo":
+        addText("You travel to Gerudo")
+        import gerudo
+
+    if user_input.lower() == "death mountain":
+        addText("You travel to Death Mountain")
+        import death_mountain
+
+    if user_input.lower() == "castle":
+        addText("You travel to Castle")
+        import castle
     user_input = user_input.split()
 
     if user_input[0].lower() == 'show':
