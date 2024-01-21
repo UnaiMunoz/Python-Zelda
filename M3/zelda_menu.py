@@ -104,8 +104,9 @@ def mainmenu():
                         print(plot)
                         showPrompt()
                         option_plot = input("\nType 'continue' to continue: ")
-                        clearScreen()
-                        import hyrule                           
+                        if option_plot.lower == "continue":
+                            clearScreen()
+                            import hyrule   
                     else:
                         addText("Invalid action")
 
