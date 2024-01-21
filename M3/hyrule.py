@@ -293,45 +293,51 @@ def hit_tree(map, new_position, espada_count=1):
                 if hit == 'yes':
                     probability = random.randint(1, 10)
 
-                    if espada_count > 0:  # Si estás usando una espada
-                        if probability <= 4:  # 40% de obtener manzana
+                    if espada_count > 0:
+                        if probability <= 4:
                             durabilidad = durabilidad - 1
-                            obtener_manzana()  # Replace with actual implementation
-                        elif probability <= 8:  # 20% de obtener espada de madera
+                            obtener_manzana()
+                        elif probability <= 8:
                             durabilidad = durabilidad - 1
                             obtener_espadamadera()
                             addText('Obtuviste una espada de madera')
-                        elif probability <= 10:  # 10% de obtener escudo de madera
+                        elif probability <= 10:
                             durabilidad = durabilidad - 1
                             obtener_escudomadera()
                             addText('Obtuviste un escudo de madera')
                         else:
                             durabilidad = durabilidad - 1
                             addText('No obtuviste nada')
-                    else:  # Si no estás usando una espada
-                        if probability <= 2:  # 20% de obtener manzana
-                            obtener_manzana()  # Replace with actual implementation
-                        elif probability <= 5:  # 30% de obtener espada de madera
-                            obtener_espadamadera
+                    else:
+                        if probability <= 2:
+                            obtener_manzana()
+                        elif probability <= 5:
+                            obtener_espadamadera()
                             addText('Obtuviste una espada de madera')
                         else:
                             addText('No obtuviste nada')
 
-                    # Verificar si el árbol debe ser cortado y reiniciar el contador de turnos
                     if durabilidad == 0:
                         talado = True
-                        map[row][column] = 't'  # 't' representa un árbol cortado
-                        turnos = 0  # Reiniciar el contador de turnos cuando el árbol es cortado
+                        map[row][column] = 't'
+                        turnos = 0
                         addText('¡Has cortado el árbol! Volverá a crecer en 10 turnos.')
 
-                turnos += 1  # Incrementar el contador de turnos después de golpear el árbol
+                else:
+                    addText('No has golpeado el árbol.')
 
-                if talado and turnos >= 10:
-                    map[row][column] = 'T'  
-                    talado = False
-                    turnos = 0
-                    addText('¡El árbol ha vuelto a crecer!')
-                
+    # Contar los turnos utilizando la función movimiento después de cada iteración
+    position = find_link(map, 'X')
+    movement_result = movimiento(map, position, 'w', turnos)
+    turnos = movement_result[1]  # Actualizar el contador de turnos
+
+    # Verificar si han pasado 10 turnos y el árbol estaba talado
+    if talado and turnos >= 10:
+        map[row][column] = 'T'  
+        talado = False
+        turnos = 0
+        addText('¡El árbol ha vuelto a crecer!')
+
             
 
 def attack_enemy(map, position):
