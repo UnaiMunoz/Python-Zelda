@@ -15,6 +15,7 @@ Exploración Épica: Descubre un mundo expansivo lleno de paisajes pintorescos, 
  - Alimentos: Recolecta alimentos como carne, pescado o vegetales para poder recuperar tus corazones y así seguir con tu misión de salvar al mundo del malvado Ganon. 
 
 # Arte y diseño
+<p align="center">
 
 ![image](https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/1beafe20-f100-41a5-b6a4-7aaccd8cecbb)
 
@@ -25,3 +26,5 @@ Exploración Épica: Descubre un mundo expansivo lleno de paisajes pintorescos, 
 ![image](https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/3ac9e771-0de2-49ce-b4e9-3d4b88dfecfc)
 
 ![image](https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/b5e423eb-d788-426d-860a-2c69e6539768)
+
+</p>
