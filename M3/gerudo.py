@@ -61,7 +61,7 @@ def move_character(map, position, direccion):
         return False
 
     if 0 <= new_position[0] < len(map) and 0 <= new_position[1] < len(map[0]):
-        if map[new_position[0]][new_position[1]] not in ['#', 'O', 'T', 'C', 'S1?',  'S1 ', 'S0?', 'S0 ', 'M', 'F', '1', 'E9', '0', '~', '*','E1', 'A']:
+        if map[new_position[0]][new_position[1]] not in ['#', 'O', 'T', 'C','E2 ', 'S4?', 'S4 ', 'M', 'F', '1','0', '~', '*','E1', 'A']:
             map[position[0]][position[1]] = ' '
             map[new_position[0]][new_position[1]] = 'X'
             return True
@@ -142,9 +142,9 @@ def cook(cooking):
 def pescar():
     while True:
         clearScreen()
-        print("* Gerudo  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+        print("* Gerudo* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
         print_map(map)
-        print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+        print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
         showPrompt()
 
         cocinando = input("¿Quieres pescar? (s/n): ")
@@ -196,6 +196,8 @@ def special_symbols(map, new_position):
                 addText("Puedes golpear este árbol")
                 hit_tree(map, new_position)
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'E1':
+                attack_enemy(map, new_position)
+            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'E2':
                 attack_enemy(map, new_position)
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'S4?':
                 interactuar_santuario4(map, character_position)
@@ -319,18 +321,19 @@ fox_spawn = random.choice(foxlist)
 
 def vida_total():
     cursor.execute("""
-        SELECT max_hearts FROM game
+        SELECT hearts_remaining FROM game
+        where game_id = (SELECT MAX(game_id) FROM game);
     """)
-    corazones_totales = cursor.fetchone()
-    if corazones_totales:
-        return corazones_totales[0]
+    corazones = cursor.fetchone()
+    if corazones:
+        return corazones[0]
     else:
         return 0
-
 
 def vida():
     cursor.execute("""
         SELECT hearts_remaining FROM game
+        where game_id = (SELECT MAX(game_id) FROM game);
     """)
     corazones = cursor.fetchone()
     if corazones:
@@ -339,18 +342,23 @@ def vida():
         return 0
 
 def armas():
-    cursor.execute("""
-    SELECT COUNT(weapon_name) AS total_quantity
-FROM game_weapons; 
-    """)
-    contar = cursor.fetchone()
-    if contar:
-        return contar[0]
-    else:
-        return 0
+    try:
+        cursor.execute("""
+        SELECT COUNT(weapon_name) AS total_quantity
+    FROM game_weapons; 
+        """)
+        contar = cursor.fetchone()
+        if contar:
+            return contar[0]
+        else:
+            return 0
+    except Exception as e:
+        print(f"error in comida {e}")
+        return None
 def blood_moon():
     cursor.execute("""
-        SELECT blood_moon_countdown FROM game;
+        SELECT blood_moon_countdown FROM game
+                   WHERE game_id = (SELECT MAX(game_id) FROM game); ;
     """)
     lunaroja = cursor.fetchone()
     if lunaroja:
@@ -358,43 +366,68 @@ def blood_moon():
     else:
         return 0
 def contar_comida():
-    cursor.execute("""SELECT SUM(quantity_remaining) AS total_quantity
-FROM game_food;""")
-    comida = cursor.fetchone()
-    if comida:
-        return comida[0]
+    try:
+        cursor.execute("""SELECT SUM(quantity_remaining) AS total_quantity
+        FROM game_food """)
+        comida = cursor.fetchone()
+        if comida:
+            return comida[0]
+        else:
+            return 0
+    except Exception as e:
+        print(f"error in comida {e}")
+        return None
+
+
+def espada():
+    try:
+        cursor.execute("""
+        SELECT quantity_remaining FROM game_weapons
+        WHERE weapon_name = 'Sword' and game_id = (SELECT MAX(game_id) FROM game);
+        """)
+        result = cursor.fetchone()
+        return result[0] if result else None
+    except Exception as e:
+        print(f"Error in espada: {e}")
+        return None
+
+
+
+def get_name():
+    cursor.execute("""
+        SELECT user_name FROM game
+        where game_id = (SELECT MAX(game_id) FROM game);
+    """)
+    nombre = cursor.fetchone()
+    if nombre:
+        return nombre[0]
     else:
         return 0
-
-def espada(cursor):
-    cursor.execute("""
-    SELECT quantity_remaining FROM game_weapons
-    WHERE weapon_name = 'Sword'
-    """)
-    result = cursor.fetchone()
-    return result[0] if result else None  # Return the quantity or None if no result
-
-def escudo(cursor):
-    cursor.execute("""
-    SELECT quantity_remaining FROM game_weapons
-    WHERE weapon_name = 'Shield'
-    """)
-    result = cursor.fetchone()
-    return result[0] if result else None
+def escudo():
+    try:
+        cursor.execute("""
+        SELECT quantity_remaining FROM game_weapons
+        WHERE weapon_name = 'Shield' and game_id = (SELECT MAX(game_id) FROM game);
+        """)
+        result = cursor.fetchone()
+        return result[0] if result else None
+    except Exception as e:
+        print(f"Error in espada: {e}")
+        return None
 
 
 
 
-map = [   ['*', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'M', ' ', ' ', ' ', ' ', ' ', '*'],
-          ['*', ' ', 'O', 'O', 'O', 'O', 'O', ' ', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T', 'T', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],
-          ['*', '', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'S4?', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O', '*'],                 
-          ['*', '', 'E1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O', 'O', '*'],                
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O', 'O', '*'],                
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'A', 'A', 'A', 'A', 'A', 'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E2', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],
-          ['*', ' ', ' ', ' ', ' ', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],                
-          ['*', ' ', 'X', ' ', ' ', ' ', ' ', ' ', 'M', ' ', ' ', ' ', 'A', 'A', 'A', 'A', 'A', 'A', 'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', f'{fox_spawn}', ' ', ' ', ' ', ' ', ' ', '~', '~', '*'],
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'A', 'A', 'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '*'],
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '*']
+map = [   ['*', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'M', ' ', ' ', ' ', ' ', ' ', '*', ' ', ' ', ' ', ' ', ' ', ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*',],
+          ['*', ' ', 'O', 'O', 'O', 'O', 'O', ' ', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T', 'T', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*',' ',f'{get_name()}',' ',' ',' ',' ','♥', f'{vida()}','/', f'{vida_total()} ',' ',' ','*',' ','',''],
+          ['*', '', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'S4?', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O', '*',' ','Blood', 'Moon',' In',' ','', f'{blood_moon()} ',' ','*','',' ',' ','',],                 
+          ['*', '', 'E1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O', 'O', '*',' ','Equipment',' ',' ',' ',' ',' ',' ',' ',' ','*',' ',''],                
+          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O', 'O', '*',' ',' ','Sword',' ','','', f'{espada()} ',' ',' ',' ',' ',' ',' ',' ',' ','*'],                
+          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'A', 'A', 'A', 'A', 'A', 'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E2', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*',' ',' ','Shield','','',' ', f'{escudo()} ',' ',' ',' ',' ',' ',' ',' ','','*'],
+          ['*', ' ', ' ', ' ', ' ', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*'],                
+          ['*', ' ', 'X', ' ', ' ', ' ', ' ', ' ', 'M', ' ', ' ', ' ', 'A', 'A', 'A', 'A', 'A', 'A', 'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', f'{fox_spawn}', ' ', ' ', ' ', ' ', ' ', '~', '~', '*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*'],
+          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'A', 'A', 'A', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '*', ' ',' ','','Food', ' ',f'{contar_comida()}','',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*'],
+          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '*','  ','Weapons', '',f'{armas()}',' ',' ',' ',' ',' ',' ',' ',' ','*']
 ]
 
 
@@ -428,9 +461,9 @@ while True:
     if fox_spawn == "F":
         addText("You see a Fox")
     clearScreen()
-    print("* Gerudo  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ")
+    print("* Gerudo* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
     print_map(map)
-    print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ")
+    print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
     showPrompt()
     user_input = input("\nMove to?(direction(wasd) number): ")
     if user_input.lower() == "hyrule":

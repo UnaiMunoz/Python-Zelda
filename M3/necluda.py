@@ -62,7 +62,7 @@ def move_character(map, position, direccion):
         return False
 
     if 0 <= new_position[0] < len(map) and 0 <= new_position[1] < len(map[0]):
-        if map[new_position[0]][new_position[1]] not in ['#', 'O', 'T', 'C', 'S1?',  'S1 ', 'S0?', 'S0 ', 'M', 'F', '1', 'E9', '0', '~', '*','E1','t']:
+        if map[new_position[0]][new_position[1]] not in ['#', 'O', 'T', 'C', 'S6?',  'S6 ', 'S5?', 'S5 ', 'M', 'F', '1', 'E2', '0', '~', '*','E1','t']:
             map[position[0]][position[1]] = ' '
             map[new_position[0]][new_position[1]] = 'X'
             return True
@@ -145,9 +145,9 @@ def pescar():
     while True:
         global pez_pescado
         clearScreen()
-        print("* Hyrule  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+        print("*Necluda* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
         print_map(map)
-        print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+        print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
         showPrompt()
 
         if not pez_pescado:  # Verificar si ya se ha pescado un pez en este mapa
@@ -232,9 +232,11 @@ def special_symbols(map, new_position):
                 hit_tree(map, new_position)
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'E1':
                 attack_enemy(map, new_position)
-            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'S0?':
+            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'E2':
+                attack_enemy(map, new_position)
+            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'S5?':
                 interactuar_santuario0(map, character_position)
-            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'S1?':
+            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'S6?':
                 interactuar_santuario1(map, character_position)
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == '~':
                 pescar()
@@ -352,7 +354,7 @@ def attack_enemy(map, position):
         for j in range(-1, 2):
             row = position[0] + i
             column = position[1] + j
-            if 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'E1':
+            if 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'E1' or map[row][column] == 'E2':
                 attack = input("¿Quieres atacar al enemigo?: ")
                 if attack.lower() == 'attack':
                     if sword_usos > 0:
@@ -407,24 +409,24 @@ def check_nearby_element(map, position, element):
 def interactuar_santuario0(map, character_position):
     global lives_character  # Declarar vida_personaje como global
 
-    santuario_position = check_nearby_element(map, character_position, 'S0?')
+    santuario_position = check_nearby_element(map, character_position, 'S5?')
     if santuario_position:
         # Incrementar la vida
         lives_character += 1
         # Actualizar el mapa
-        map[santuario_position[0]][santuario_position[1]] = 'S0 '
+        map[santuario_position[0]][santuario_position[1]] = 'S5 '
         # Mensaje
         addText(f"Has encontrado un santuario, tu vida ha aumentado. Ahora tienes {lives_character} vidas.")
 
 def interactuar_santuario1(map, character_position):
     global lives_character  # Declarar vida_personaje como global
 
-    santuario_position = check_nearby_element(map, character_position, 'S1?')
+    santuario_position = check_nearby_element(map, character_position, 'S6?')
     if santuario_position:
         # Incrementar la vida
         lives_character += 1
         # Actualizar el mapa
-        map[santuario_position[0]][santuario_position[1]] = 'S1 '
+        map[santuario_position[0]][santuario_position[1]] = 'S6 '
         # Mensaje
         addText(f"Has encontrado un santuario, tu vida ha aumentado. Ahora tienes {lives_character} vidas.")
 
@@ -475,7 +477,8 @@ def armas():
         return None
 def blood_moon():
     cursor.execute("""
-        SELECT blood_moon_countdown FROM game;
+        SELECT blood_moon_countdown FROM game
+                   WHERE game_id = (SELECT MAX(game_id) FROM game); ;
     """)
     lunaroja = cursor.fetchone()
     if lunaroja:
@@ -500,7 +503,7 @@ def espada():
     try:
         cursor.execute("""
         SELECT quantity_remaining FROM game_weapons
-        WHERE weapon_name = 'Sword' and game_id = 2;
+        WHERE weapon_name = 'Sword' and game_id = (SELECT MAX(game_id) FROM game);
         """)
         result = cursor.fetchone()
         return result[0] if result else None
@@ -510,13 +513,21 @@ def espada():
 
 
 
-
-
+def get_name():
+    cursor.execute("""
+        SELECT user_name FROM game
+        where game_id = (SELECT MAX(game_id) FROM game);
+    """)
+    nombre = cursor.fetchone()
+    if nombre:
+        return nombre[0]
+    else:
+        return 0
 def escudo():
     try:
         cursor.execute("""
         SELECT quantity_remaining FROM game_weapons
-        WHERE weapon_name = 'Shield' and game_id = 2;
+        WHERE weapon_name = 'Shield' and game_id = (SELECT MAX(game_id) FROM game);
         """)
         result = cursor.fetchone()
         return result[0] if result else None
@@ -530,16 +541,16 @@ if fox_spawn == 'F':
 else:
     addText("All the foxes are hidden")
 
-map = [['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'M', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*'],
-        ['*', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E1', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '', 'TT', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'M', ' ', ' ', ' ', ' ', ' ', '*'],
-        ['*', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'TT', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '*'],                 
-        ['*', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '~', '~', '*'],                
-        ['*', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '*'],                
-        ['*', '', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E2', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'S5?', '~', '~', '~', '~', '~', '*'],
-        ['*', ' ', ' ', ' ', ' ', ' ', f'{fox_spawn}', ' ', ' ', ' ', ' ', ' ', ' ', ' T9', ' ', '', ' ', ' ', ' ', ' ', ' ', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '*'],                
-        ['*', '~', '~', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T6', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '*'],
-        ['*', '~', '~', '~', '~', '~', '~', '~', '~', '', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'M', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'S6?', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '*'],
-        ['*', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '*']
+map = [['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'M', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*', ' ', ' ', ' ', ' ', ' ', ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*',],
+        ['*', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E1', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '', 'T', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'M', ' ', ' ', ' ', ' ', ' ', ' ','*',f'{get_name()}',' ',' ',' ',' ','♥', f'{vida()}','/', f'{vida_total()} ',' ',' ',' ','*','',''],
+        ['*', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '*',' ','Blood', 'Moon',' In',' ','', f'{blood_moon()} ',' ','*','',' ',' ','',],                 
+        ['*', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '~', '~', '*',' ','Equipment',' ',' ',' ',' ',' ',' ',' ',' ','*',' ',''],                
+        ['*', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '*',' ',' ','Sword',' ','','', f'{espada()} ',' ',' ',' ',' ',' ',' ',' ',' ','*'],                
+        ['*', '', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E2', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'S5?', '~', '~', '~', '~', '~', '*',' ',' ','Shield','','',' ', f'{escudo()} ',' ',' ',' ',' ',' ',' ',' ','','*'],
+        ['*', ' ', ' ', ' ', ' ', ' ', f'{fox_spawn}', ' ', ' ', ' ', ' ', ' ', ' ', ' T', ' ', '', ' ', ' ', ' ', ' ', ' ', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', ' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*'],                
+        ['*', '~', '~', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', ' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*'],
+        ['*', '~', '~', '~', '~', '~', '~', '~', '~', '', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'M', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'S6?', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '*', ' ',' ','','Food', ' ',f'{contar_comida()}','',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*'],
+        ['*', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '*','  ','Weapons', '',f'{armas()}',' ',' ',' ',' ',' ',' ',' ',' ','*']
 ]
 
 
@@ -570,7 +581,7 @@ def movimiento(map, position, direction, steps):
 
 while True:
     clearScreen()
-    print("* Necluda * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ")
+    print("*Necluda* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
     print_map(map)
     print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
     showPrompt()
