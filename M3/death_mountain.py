@@ -362,11 +362,11 @@ def hit_tree(map, new_position, espada_count=1):
                     probability = random.randint(1, 10)
 
                     if espada_count > 0:  # Si estás usando una espada
-                        if probability <= 10:  # 40% de obtener manzana
+                        if probability <= 4:  # 40% de obtener manzana
                             durabilidad = durabilidad - 1
                             obtener_manzana()  # Replace with actual implementation
                             addText(f'Obtuviste una manzana')
-                        elif probability <= 1:  # 10% de obtener espada de madera
+                        elif probability <= 5:  # 10% de obtener espada de madera
                             durabilidad = durabilidad - 1
                             herramienta = random.choice([obtener_escudomadera, obtener_espadamadera])()
                             addText(f'Obtuviste una {herramienta}')
