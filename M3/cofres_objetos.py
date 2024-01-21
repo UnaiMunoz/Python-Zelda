@@ -1,4 +1,25 @@
 import random
+import mysql.connector
+conexion = mysql.connector.connect(user='root', password='david',
+                                   host='localhost',
+                                   database='Zelda')
+
+cursor = conexion.cursor()
+prompt_historial = []
+
+
+def addText(texto):
+    prompt_historial.append(texto)
+
+    if len(prompt_historial) > 8:
+        prompt_historial.pop(0)
+
+def showPrompt():
+    if prompt_historial:
+        print("Últimas acciones:")
+        for prompt in prompt_historial:
+            print("->" + " " + prompt)
+
 
 # Función para usar una espada
 def usar_espada(espada):
