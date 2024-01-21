@@ -23,3 +23,5 @@ Exploración Épica: Descubre un mundo expansivo lleno de paisajes pintorescos, 
 ![image](https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/039ca7f9-2b4a-44ff-a2f1-21f4081d2e3a)
 
 ![image](https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/3ac9e771-0de2-49ce-b4e9-3d4b88dfecfc)
+
+![image](https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/b5e423eb-d788-426d-860a-2c69e6539768)
