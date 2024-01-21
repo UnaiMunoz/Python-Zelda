@@ -76,7 +76,7 @@ def cook(cooking):
         cursor.execute("""
         UPDATE game_food
         SET quantity_remaining = quantity_remaining - 2
-        WHERE food_name = 'Apple' AND quantity_remaining >= 2;""")
+        WHERE food_name = 'Apple' AND quantity_remaining >= 2 AND game_id = (SELECT MAX(game_id) FROM game);""")
         if cursor.rowcount == 0:
             addText("You can't cook that! Not enough 'Apple' available.")
         else:
@@ -84,7 +84,7 @@ def cook(cooking):
             cursor.execute("""
             UPDATE game_food
             SET quantity_remaining = quantity_remaining + 1
-            WHERE food_name = 'Salad';""")
+            WHERE food_name = 'Salad' AND  game_id = (SELECT MAX(game_id) FROM game);""")
         #PESCADO
     elif cooking.lower() == "pescatarian":
         addText("You selected Pescatarian")
@@ -244,12 +244,24 @@ def special_symbols(map, new_position):
                     cofres_objetos.abrir_cofre("hyrule")
 
 def obtener_manzana():
-    cursor.execute("""
-    UPDATE game_food
-    SET quantity_remaining = quantity_remaining + 1
-    WHERE food_name = 'Apple';""")
-    conexion.commit()
-    addText('Obtuviste una manzana')
+    try:
+        cursor.execute(f"""
+            UPDATE game_food
+            SET quantity_remaining = quantity_remaining + 1
+            WHERE food_name = 'Apple' AND  game_id = (SELECT MAX(game_id) FROM game);
+        """)
+            
+        # Fetch the result before committing
+        result = cursor.fetchone()
+        
+        conexion.commit()
+        
+        if result:
+            addText('Obtuviste una manzana')
+    except Exception as e:
+        print(f"Error in obtener_manzana: {e}")
+        conexion.rollback()  # Rollback the transaction in case of an error
+
 
 def obtener_pescao():
     cursor.execute("""
@@ -263,7 +275,7 @@ def obtener_espadamadera():
     cursor.execute("""
     UPDATE game_food
     SET quantity_remaining = quantity_remaining + 1
-    WHERE food_name = 'wood sword';""")
+    WHERE food_name = 'wood sword' and game_id = 2;""")
     conexion.commit()
     addText('Obtuviste una espada de madera')
 
@@ -271,7 +283,7 @@ def obtener_escudomadera():
     cursor.execute("""
     UPDATE game_food
     SET quantity_remaining = quantity_remaining + 1
-    WHERE food_name = 'wood shield';""")
+    WHERE food_name = 'wood shield and game_id = 2';""")
     conexion.commit()
     addText('Obtuviste un escudo de madera')
 
@@ -294,25 +306,23 @@ def hit_tree(map, new_position, espada_count=1):
                     probability = random.randint(1, 10)
 
                     if espada_count > 0:  # Si estás usando una espada
-                        if probability <= 4:  # 40% de obtener manzana
+                        if probability <= 10:  # 40% de obtener manzana
                             durabilidad = durabilidad - 1
                             obtener_manzana()  # Replace with actual implementation
-                        elif probability <= 8:  # 20% de obtener espada de madera
+                            addText(f'Obtuviste una manzana')
+                        elif probability <= 1:  # 10% de obtener espada de madera
                             durabilidad = durabilidad - 1
-                            obtener_espadamadera()
-                            addText('Obtuviste una espada de madera')
-                        elif probability <= 10:  # 10% de obtener escudo de madera
-                            durabilidad = durabilidad - 1
-                            obtener_escudomadera()
-                            addText('Obtuviste un escudo de madera')
+                            herramienta = random.choice([obtener_escudomadera, obtener_espadamadera])()
+                            addText(f'Obtuviste una {herramienta}')
                         else:
                             durabilidad = durabilidad - 1
                             addText('No obtuviste nada')
                     else:  # Si no estás usando una espada
-                        if probability <= 2:  # 20% de obtener manzana
+                        if probability <= 4:  # 40% de obtener manzana
                             obtener_manzana()  # Replace with actual implementation
-                        elif probability <= 5:  # 30% de obtener espada de madera
-                            obtener_espadamadera
+                            addText("Obtuviste una manzana")
+                        elif probability <= 6:  # 20% de obtener espada de madera
+                            obtener_espadamadera()
                             addText('Obtuviste una espada de madera')
                         else:
                             addText('No obtuviste nada')
@@ -426,20 +436,22 @@ foxlist = [" ", "F"]
 fox_spawn = random.choice(foxlist)
 
 
+
 def vida_total():
     cursor.execute("""
-        SELECT max_hearts FROM game
+        SELECT hearts_remaining FROM game
+        where game_id = (SELECT MAX(game_id) FROM game);
     """)
-    corazones_totales = cursor.fetchone()
-    if corazones_totales:
-        return corazones_totales[0]
+    corazones = cursor.fetchone()
+    if corazones:
+        return corazones[0]
     else:
         return 0
-
 
 def vida():
     cursor.execute("""
         SELECT hearts_remaining FROM game
+        where game_id = (SELECT MAX(game_id) FROM game);
     """)
     corazones = cursor.fetchone()
     if corazones:
@@ -448,15 +460,19 @@ def vida():
         return 0
 
 def armas():
-    cursor.execute("""
-    SELECT COUNT(weapon_name) AS total_quantity
-FROM game_weapons; 
-    """)
-    contar = cursor.fetchone()
-    if contar:
-        return contar[0]
-    else:
-        return 0
+    try:
+        cursor.execute("""
+        SELECT COUNT(weapon_name) AS total_quantity
+    FROM game_weapons; 
+        """)
+        contar = cursor.fetchone()
+        if contar:
+            return contar[0]
+        else:
+            return 0
+    except Exception as e:
+        print(f"error in comida {e}")
+        return None
 def blood_moon():
     cursor.execute("""
         SELECT blood_moon_countdown FROM game;
@@ -467,29 +483,46 @@ def blood_moon():
     else:
         return 0
 def contar_comida():
-    cursor.execute("""SELECT SUM(quantity_remaining) AS total_quantity
-FROM game_food;""")
-    comida = cursor.fetchone()
-    if comida:
-        return comida[0]
-    else:
-        return 0
+    try:
+        cursor.execute("""SELECT SUM(quantity_remaining) AS total_quantity
+        FROM game_food """)
+        comida = cursor.fetchone()
+        if comida:
+            return comida[0]
+        else:
+            return 0
+    except Exception as e:
+        print(f"error in comida {e}")
+        return None
 
-def espada(cursor):
-    cursor.execute("""
-    SELECT quantity_remaining FROM game_weapons
-    WHERE weapon_name = 'Sword'
-    """)
-    result = cursor.fetchone()
-    return result[0] if result else None  # Return the quantity or None if no result
 
-def escudo(cursor):
-    cursor.execute("""
-    SELECT quantity_remaining FROM game_weapons
-    WHERE weapon_name = 'Shield'
-    """)
-    result = cursor.fetchone()
-    return result[0] if result else None
+def espada():
+    try:
+        cursor.execute("""
+        SELECT quantity_remaining FROM game_weapons
+        WHERE weapon_name = 'Sword' and game_id = 2;
+        """)
+        result = cursor.fetchone()
+        return result[0] if result else None
+    except Exception as e:
+        print(f"Error in espada: {e}")
+        return None
+
+
+
+
+
+def escudo():
+    try:
+        cursor.execute("""
+        SELECT quantity_remaining FROM game_weapons
+        WHERE weapon_name = 'Shield' and game_id = 2;
+        """)
+        result = cursor.fetchone()
+        return result[0] if result else None
+    except Exception as e:
+        print(f"Error in espada: {e}")
+        return None
 
 
 if fox_spawn == 'F':
@@ -498,15 +531,15 @@ else:
     addText("All the foxes are hidden")
 
 map = [   ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', 'O', 'O', 'O', '*', ' ', ' ', ' ', ' ', ' ', ' ',' ',' ',' ',' ',' ',' ',' ',' ','*'],
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', 'O', 'O', '~', 'O', 'O', 'O', 'O', '~', '*',' ','Link',' ',' ',' ',' ','♥',f'{vida()}','/',f'{vida_total()}',' ',' ','','*'],
-          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '*',' ','Blood','Moon','In',' ',f'{blood_moon()}',' ',' ',' ','','*',],
+          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', 'O', 'O', '~', 'O', 'O', 'O', 'O', '~', '*',' ','Link',' ',' ',' ',' ','♥', f'{vida()}','/', f'{vida_total()} ',' ',' ','','*'],
+          ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', ' ', ' ', ' ', '~', '~', '~', '~', '~', '~', '*',' ','Blood', 'Moon',' In',' ','', f'{blood_moon()} ',' ',' ','','*',],
           ['*', ' ', ' ', ' ', ' ', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '~', '~', '~', '*',' ','Equipment',' ',' ',' ',' ',' ',' ',' ',' ','*'],
-          ['*', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E9', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*',' ',' ','Sword',' ',f'{espada(cursor)}',' ',' ',' ',' ',' ',' ',' ','*'],
-          ['*', '', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'S0?', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*',' ',' ','Shield','',f'{escudo(cursor)}',' ',' ',' ',' ',' ',' ',' ','*'],
+          ['*', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E9', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*',' ',' ','Sword',' ','','', f'{espada()} ',' ',' ',' ',' ',' ',' ','*'],
+          ['*', '', '', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'S0?', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*',' ',' ','Shield','','','', f'{escudo()} ',' ',' ',' ',' ',' ','*'],
           ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*'],
           ['*', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*'],
-          ['*', ' ', 'O', 'O', ' ', ' ', ' ', ' ', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'S1?', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T', ' ', 'M', ' ', ' ', ' ', ' ', ' ', f'{fox_spawn}', ' ', ' ', ' *',' ','','Food',f'{contar_comida()}','','',' ',' ',' ',' ',' ',' ',' ',' ','*'],
-          ['*', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*','  ','Weapons',f'{armas()}','',' ',' ',' ',' ',' ',' ',' ','*']
+          ['*', ' ', 'O', 'O', ' ', ' ', ' ', ' ', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'S1?', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'T', ' ',' ', ' ', 'M', ' ', ' ', ' ', f'{fox_spawn}', ' ', ' ', ' *',' ','','Food', f'{contar_comida()}','','',' ',' ',' ',' ',' ',' ',' ',' ','*'],
+          ['*', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*','  ','Weapons', f'{armas()}','',' ',' ',' ',' ',' ',' ',' ','*']
           ]
 
 
@@ -593,6 +626,5 @@ while True:
 
     else:
         addText("Entrada no válida. Intenta de nuevo.")
-
 conexion.close()
 print("Juego terminado.")

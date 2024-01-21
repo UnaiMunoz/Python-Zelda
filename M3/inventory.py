@@ -1,108 +1,81 @@
 import mysql.connector
 
-def connect_to_database():
+conexion = mysql.connector.connect(user='root', password='david',
+                                   host='localhost',
+                                   database='Zelda')
+
+cursor = conexion.cursor()
+
+def durability(arma):
+    cursor.execute(f"""
+        SELECT lives_remaining FROM game_weapons
+        where weapon_name ='{arma}' and game_id = (SELECT MAX(game_id) FROM game);
+    """)
+    usos = cursor.fetchone()
+    if usos:
+        return usos[0]
+    else:
+        return 0
+def equipado(arma):
+    cursor.execute(f"""
+        SELECT equiped FROM game_weapons
+        WHERE weapon_name = '{arma}' AND game_id = (SELECT MAX(game_id) FROM game);
+    """)
+    equipo = cursor.fetchone()
+    if equipo:
+        return equipo[0]
+    else:
+        return 0
+    
+
+def cantidad(arma):
+    cursor.execute(f"""
+        SELECT quantity_remaining FROM game_weapons
+        WHERE weapon_name = '{arma}' AND game_id = (SELECT MAX(game_id) FROM game);
+    """)
+    golpes = cursor.fetchone()
+    if golpes:
+        return golpes[0]
+    else:
+        return 0
+    
+
+def equip(arma):
     try:
-        connection = mysql.connector.connect(user='root', password='david', host='localhost', database='Zelda')
-        return connection
-    except mysql.connector.Error as err:
-        print(f"Error: {err}")
-        return None
+        cursor.execute(f"""
+            SELECT equiped FROM game_weapons
+            WHERE weapon_name = '{arma}' AND game_id = (SELECT MAX(game_id) FROM game);
+        """)
+        equipo = cursor.fetchone()
+        
+        if equipo is not None:
+            if equipo[0] == 0:
+                return 1
+            else:
+                return 0                
+        else:
+            print(f"Weapon {arma} not found in the latest game.")
 
-def close_connection(connection):
-    if connection:
-        connection.close()
-
-def vida_total(cursor):
-    cursor.execute("SELECT max_hearts FROM game")
-    corazones_totales = cursor.fetchone()
-    return corazones_totales[0] if corazones_totales else 0
-
-def vida(cursor):
-    cursor.execute("SELECT hearts_remaining FROM game")
-    corazones = cursor.fetchone()
-    return corazones[0] if corazones else 0
-
-def equipamiento(cursor):
-    cursor.execute("SELECT weapon_name, quantity_remaining, equiped FROM game_weapons")
-    armas = cursor.fetchall()
     
-    equipamiento_str = "* Equipment         *"
+    except Exception as e:
+        print(f"Error: {e}")
     
-    for arma in armas:
-        equipado = "(equipped)" if arma[2] else "(unequipped)"
-        equipamiento_str += f"\n* {arma[0]:<16} * {arma[1]:<5} {equipado}"
     
-    equipamiento_str += "\n*                   *"
     
-    return equipamiento_str
-
-def food_info(cursor):
-    cursor.execute("SELECT food_name, quantity_remaining FROM game_food WHERE game_id = 1")
-    alimentos = cursor.fetchall()
-    
-    alimentos_str = "* Food              *"
-    
-    for alimento in alimentos:
-        alimentos_str += f"\n* {alimento[0]:<16} * {alimento[1]:<5}"
-    
-    alimentos_str += "\n*                   *"
-    
-    return alimentos_str
-
-def weapons_info(cursor):
-    cursor.execute("SELECT weapon_name, quantity_remaining FROM game_weapons")
-    armas = cursor.fetchall()
-    
-    armas_str = "* Weapons           *"
-    
-    for arma in armas:
-        armas_str += f"\n* {arma[0]:<16} * {arma[1]:<5}"
-    
-    armas_str += "\n*                   *"
-    
-    return armas_str
-
-def mostrar_inventario(cursor):
-    inventario = (f"""
-* * * * * * * * * * Inventory * * * * * * * * *
-*                   *                      *
-* Link        ♥ {vida(cursor)}/{vida_total(cursor)} *                   *
-{equipamiento(cursor)}
-* * * * * * * * * * * * * * * * * * * * * * *
+print(f"""
+* * * * * * Weapons *
+*                   *                   
+*                   *
+* Wood Sword    {durability("Wood Sword")}/{cantidad("Wood Sword")} *
+*  Equipped:    {equip("Wood Sword")}   *
+* Sword         {durability("Sword")}/{cantidad("Sword")} *
+*  Equipped:    {(equip(("Sword")))}*
+* Wood Shield   {durability("Wood Shield")}/{cantidad("Wood Shield")} *
+*  Equipped:    {(equip(("Wood Shield")))}*
+* Shield        {durability("Shield")}/{cantidad("Shield")} *
+*  Equipped:    {(equip(("Shield")))}*
+* * * * * * * * * * *
 """)
-    print(inventario)
 
-def mostrar_weapons(cursor):
-    print(weapons_info(cursor))
-
-def mostrar_food(cursor):
-    print(food_info(cursor))
-
-def main():
-    connection = connect_to_database()
-    
-    if connection:
-        try:
-            cursor = connection.cursor()
-
-            opcion = "Show inventory main"
-            if opcion == "Show inventory main":
-                mostrar_inventario(cursor)
-
-                # Preguntar al usuario si desea ver armas o alimentos
-                opcion_detalle = input("Do you want to see weapons or food inventory? (Type 'weapons' or 'food'): ")
-
-                if opcion_detalle.lower() == 'weapons':
-                    mostrar_weapons(cursor)
-                elif opcion_detalle.lower() == 'food':
-                    mostrar_food(cursor)
-
-        finally:
-            close_connection(connection)
-
-if __name__ == "__main__":
-    main()
-#opcio = input("What do you want to do?")
-#menu(opcio)
-print(inventory)
+# Close the connection
 conexion.close()

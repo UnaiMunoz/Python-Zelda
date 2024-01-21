@@ -50,7 +50,22 @@ def dar_id():
     nueva_id = ultima + 1
     return nueva_id
 
-
+def NuevoJugador(Name,id):
+    #COMIDA
+    cursor.execute(f"INSERT INTO game VALUES ({id}, '{Name}', '{hoy}', {corazones}, 25, 0, 'Hyrule', {corazones_max})")
+    cursor.execute(f"INSERT INTO game_food VALUES ({id}, 'Apple', 0)")
+    cursor.execute(f"INSERT INTO game_food VALUES ({id},'Meat',0)")
+    cursor.execute(f"INSERT INTO game_food VALUES({id},'pescao',0)")
+    cursor.execute(f"INSERT INTO game_food VALUES ({id},'pescatarian',0)")
+    cursor.execute(f"INSERT INTO game_food VALUES ({id},'roasted',0)")
+    cursor.execute(f"INSERT INTO game_food VALUES ({id},'Salad',0)")
+    #WEAPONS
+    cursor.execute(f"INSERT INTO game_weapons VALUES ({id},'Shield',0,9,0)")
+    cursor.execute(f"INSERT INTO game_weapons VALUES ({id},'Sword',0,9,0)")
+    cursor.execute(f"INSERT INTO game_weapons VALUES ({id},'Wood Sword',0,5,0)")
+    cursor.execute(f"INSERT INTO game_weapons VALUES ({id},'Wood Shield',0,9,0)")
+    conexion.commit()
+    conexion.close()    
 
 def validateName(name):
     allowed_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0º23456789 "
@@ -59,14 +74,6 @@ def validateName(name):
             return True
     else:
         return False    
-def update_nombre(name,id):
-    actualizar = (f"""
-            INSERT INTO game (game_id, user_name, date_started, hearts_remaining, blood_moon_countdown, blood_moon_appearances, region_char,max_hearts)
-            VALUES ({id}, '{name}', '{hoy}', {corazones}, 0, 0, 'Hyrule',{corazones_max});
-        """)
-    cursor.execute(actualizar)
-    conexion.commit()
-    conexion.close()
 
 def mainmenu():
     sortir = True
@@ -101,7 +108,7 @@ def mainmenu():
                         addText("Invalid action")
                 while validateName(option_game) == True and option_game != "Back":
                     clearScreen()
-                    update_nombre(option_game,dar_id())
+                    NuevoJugador(option_game,dar_id())
                     addText(f'Welcome to the game, "{option_game}"')
                     print(legend)
                     showPrompt()
@@ -121,7 +128,7 @@ def mainmenu():
                 if option_game == "":
                     option_game = 'link'
                     clearScreen()
-                    update_nombre(option_game,dar_id())
+                    NuevoJugador(option_game,dar_id())
                     addText(f'Welcome to the game, "{option_game}"')
                     print(legend)
                     showPrompt()
