@@ -113,5 +113,10 @@ def cheats():
     # Add similar blocks for other weapon-related cheats
     elif cheat_input == "cheat open sanctuaries":
         cursor.execute()
+
+
+
+        
     else:
         addText("Unknown cheat command.")
+
