@@ -9,7 +9,8 @@
 En este juego de aventuras inspirado en la icónica serie de "The Legend of Zelda", te pondrás en la piel de Link, el valiente héroe destinado a enfrentarse a las fuerzas oscuras que amenazan Hyrule. Tu misión es recorrer el vasto mundo abierto, explorar mazmorras llenas de enigmas y enemigos, y recolectar objetos mágicos para fortalecer tu arsenal.
 
 <h2>Características Principales<h2>
-Exploración Épica: Descubre un mundo expansivo lleno de paisajes pintorescos, pueblos encantadores y misteriosas mazmorras. ¡La aventura te espera en cada esquina!
+
+<p>Exploración Épica: Descubre un mundo expansivo lleno de paisajes pintorescos, pueblos encantadores y misteriosas mazmorras. ¡La aventura te espera en cada esquina!<p>
 
 ### Combate Estratégico: Enfréntate a una variedad de enemigos, desde esqueletos errantes hasta poderosos jefes finales. Utiliza tu espada, arco y otros artefactos mágicos para superar los desafíos.
 
