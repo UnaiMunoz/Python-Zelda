@@ -67,3 +67,51 @@ def resetear_cofres():
     cofres_abiertos = set()
     print("Todos los cofres han sido reseteados. ¡Puedes abrirlos de nuevo!")
 
+def cheats():
+    global sword_usos
+    global lives_character
+
+    cheat_input = input("Enter cheat command: ")
+
+    if cheat_input.startswith("cheat rename player to "):
+        new_name = cheat_input[len("cheat rename player to "):]
+        if 3 <= len(new_name) <= 10 and all(c.isalnum() or c.isspace() for c in new_name):
+            addText(f"Player's name changed to: {new_name}")
+        else:
+            addText("Invalid name. Must be between 3 and 10 characters, and can only contain letters, numbers, and spaces.")
+
+    elif cheat_input == "cheat add vegetable":
+        cursor.execute("UPDATE game_food SET quantity_remaining = quantity_remaining + 1 WHERE food_name = 'Vegetable';")
+        conexion.commit()
+        addText("Added a vegetable to food.")
+
+    elif cheat_input == "cheat add fish":
+        cursor.execute("UPDATE game_food SET quantity_remaining = quantity_remaining + 1 WHERE food_name = 'Fish';")
+        conexion.commit()
+        addText("Added a fish to food.")
+
+    elif cheat_input == "cheat add meat":
+        cursor.execute("UPDATE game_food SET quantity_remaining = quantity_remaining + 1 WHERE food_name = 'Meat';")
+        conexion.commit()
+        addText("Added meat to food.")
+
+    elif cheat_input == "cheat cook salad":
+        cursor.execute("UPDATE game_food SET quantity_remaining = quantity_remaining - 2 WHERE food_name = 'Vegetable' AND quantity_remaining >= 2;")
+        if cursor.rowcount > 0:
+            cursor.execute("UPDATE game_food SET quantity_remaining = quantity_remaining + 1 WHERE food_name = 'Salad';")
+            addText("Cooked a salad.")
+        else:
+            addText("Not enough vegetables to cook a salad.")
+
+    # Add similar blocks for other food-related cheats
+
+    elif cheat_input == "cheat add wood sword":
+        cursor.execute("UPDATE game_weapons SET quantity_remaining = quantity_remaining + 1 WHERE weapon_name = 'Wood Sword';")
+        conexion.commit()
+        addText("Added a wood sword.")
+
+    # Add similar blocks for other weapon-related cheats
+    elif cheat_input == "cheat open sanctuaries":
+        cursor.execute()
+    else:
+        addText("Unknown cheat command.")
