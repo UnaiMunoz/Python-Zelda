@@ -537,6 +537,12 @@ map_zelda = ("""
 
 character_position = find_link(map, 'X')
 
+def actualizar_zona(zona):
+    cursor.execute(f"""
+        UPDATE game
+        SET region_char = '{zona}'
+        WHERE game_id = (SELECT MAX(game_id) FROM game);""")
+
 def movimiento(map, position, direction, steps):
     for _ in range(steps):
         success = move_character(map, position, direction.lower())
@@ -556,14 +562,20 @@ while True:
     user_input = input("\nMove to?(direction(wasd) number): ")
     if user_input.lower() == "hyrule":
         addText("You travel to Hyrule")
+        actualizar_zona(user_input)
+        conexion.commit()
         import hyrule
 
     if user_input.lower() == "necluda":
         addText("You travel to Necluda")
+        actualizar_zona(user_input)
+        conexion.commit()
         import necluda
 
     if user_input.lower() == "castle":
         addText("You travel to Castle")
+        actualizar_zona(user_input)
+        conexion.commit()
         import castle
     
     if user_input.lower() == "eat vegetables":

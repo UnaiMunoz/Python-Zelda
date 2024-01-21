@@ -182,7 +182,7 @@ def swing_sword():
         addText("Obtuviste 1 de carne.")
         conexion.commit()
     else:
-        addText("You missed")
+        addText("You missed")   
 
 def special_symbols(map, new_position):
     for i in range(-1, 2):
@@ -626,6 +626,13 @@ map_zelda = ("""
 
 character_position = find_link(map, 'X')
 
+def actualizar_zona(zona):
+    cursor.execute(f"""
+        UPDATE game
+        SET region_char = '{zona}'
+        WHERE game_id = (SELECT MAX(game_id));""")
+
+
 def movimiento(map, position, direction, steps):
     for _ in range(steps):
         success = move_character(map, position, direction.lower())
@@ -642,15 +649,19 @@ while True:
     showPrompt()
     user_input = input("\nMove to?(direction(wasd) number): ")
     if user_input.lower() == "gerudo":
+        actualizar_zona(user_input)
         addText("You travel to Gerudo")
+        conexion.commit()
         import gerudo
-
     if user_input.lower() == "death mountain":
+        actualizar_zona(user_input)
         addText("You travel to Death Mountain")
+        conexion.commit()
         import death_mountain
-
     if user_input.lower() == "castle":
+        actualizar_zona(user_input)
         addText("You travel to Castle")
+        conexion.commit()
         import castle
     if user_input.lower() == "eat vegetables":
         subir_vida("Apple")
