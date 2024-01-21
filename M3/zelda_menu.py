@@ -106,22 +106,37 @@ def mainmenu():
                     print(legend)
                     showPrompt()
                     option_legend = input("\nType 'continue' to continue ")
-                    if option_legend == "Continue":
+                    if option_legend.lower() == "continue":
                         clearScreen()
                         addText(option_legend)
                         print(plot)
                         showPrompt()
                         option_plot = input("\nType 'continue' to continue: ")
-                        if option_plot.lower == "continue":
+                        if option_plot.lower() == "continue":
                             clearScreen()
                             import hyrule   
                     else:
                         addText("Invalid action")
 
-                if len(option_game) == "":
+                if option_game == "":
                     option_game = 'link'
+                    clearScreen()
+                    update_nombre(option_game,dar_id())
                     addText(f'Welcome to the game, "{option_game}"')
-
+                    print(legend)
+                    showPrompt()
+                    option_legend = input("\nType 'continue' to continue ")
+                    if option_legend.lower() == "continue":
+                        clearScreen()
+                        addText(option_legend)
+                        print(plot)
+                        showPrompt()
+                        option_plot = input("\nType 'continue' to continue: ")
+                        if option_plot.lower() == "continue":
+                            clearScreen()
+                            import hyrule   
+                    else:
+                        addText("Invalid action")                    
                 elif option_game == "Back":
                     addText(option_game)
                     break
