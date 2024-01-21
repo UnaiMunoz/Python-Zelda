@@ -89,7 +89,7 @@ def mainmenu():
                 print("You leave the game")
                 sortir = False
                 break
-
+ 
             while option == "new game":
                 clearScreen()
                 print(new_game)
