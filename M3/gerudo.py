@@ -3,6 +3,7 @@ import random
 
 import mysql.connector
 from ascii import menu_cocina
+import cofres_objetos
 conexion = mysql.connector.connect(user='root', password='david',
                                    host='localhost',
                                    database='Zelda')
@@ -164,6 +165,20 @@ def pescar():
             addText("Entrada no válida. Por favor, responde con 's' o 'n'.")
             showPrompt()
 
+def swing_sword():
+    probabilidad = random.randint(1,10)
+    if probabilidad <= 1:
+        cursor.execute("""
+            UPDATE game_food
+            SET quantity_remaining = quantity_remaining + 1
+            WHERE game_id = (SELECT MAX(game_id) FROM game) AND food_name = 'Meat';
+        """)
+        addText("¡Atacaste con éxito y mataste a la lagartija!")
+        addText("Obtuviste 1 de carne.")
+        conexion.commit()
+    else:
+        addText("You missed")
+
 def special_symbols(map, new_position):
     for i in range(-1, 2):
         for j in range(-1, 2):
@@ -203,7 +218,80 @@ def special_symbols(map, new_position):
                 interactuar_santuario4(map, character_position)
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == '~':
                 pescar()
+            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'M':
+                abrir = input("Quieres abir el cofre?: ")
+                if abrir.lower() == "yes":
+                    cofres_objetos.abrir_cofre("hyrule")
 
+def subir_vida(comida):
+    global lives_character
+    
+    if comida.lower() == "apple":
+        if vida() < vida_total():
+            cursor.execute("""
+                UPDATE game
+                SET hearts_remaining = hearts_remaining + 1
+                WHERE game_id = (SELECT MAX(game_id) FROM game) AND hearts_remaining < 6;
+            """)
+            cursor.execute("""
+                UPDATE game_food
+                SET quantity_remaining = quantity_remaining - 1
+                WHERE food_name = 'Apple' AND quantity_remaining >= 1 AND game_id = (SELECT MAX(game_id) FROM game);
+            """)
+            conexion.commit()
+            addText("Has comido una manzana y has subido 1 corazón.")
+        else:
+            addText("Ya tienes la cantidad máxima de corazones.")
+    elif comida.lower() == "salad":
+        if vida() < vida_total() - 1:
+            cursor.execute("""
+                UPDATE game
+                SET hearts_remaining = hearts_remaining + 2
+                WHERE game_id = (SELECT MAX(game_id) FROM game) AND hearts_remaining < 5;
+            """)
+            cursor.execute("""
+                UPDATE game_food
+                SET quantity_remaining = quantity_remaining - 1
+                WHERE food_name = 'Salad' AND quantity_remaining >= 1 AND game_id = (SELECT MAX(game_id) FROM game);
+            """)
+            conexion.commit()
+            addText("Has comido una ensalada y has subido 2 corazones.")
+        else:
+            addText("Ya tienes la cantidad máxima de corazones.")
+    elif comida.lower() == "pescatarian":
+        if vida() < vida_total() - 2:
+            cursor.execute("""
+                UPDATE game
+                SET hearts_remaining = hearts_remaining + 3
+                WHERE game_id = (SELECT MAX(game_id) FROM game) AND hearts_remaining < 4;
+            """)
+            cursor.execute("""
+                UPDATE game_food
+                SET quantity_remaining = quantity_remaining - 1
+                WHERE food_name = 'Pescatarian' AND quantity_remaining >= 1 AND game_id = (SELECT MAX(game_id) FROM game);
+            """)
+            conexion.commit()
+            addText("Has comido un plato pescatarian y has subido 3 corazones.")
+        else:
+            addText("Ya tienes la cantidad máxima de corazones.")
+    elif comida.lower() == "roasted":
+        if vida() < vida_total() - 3:
+            cursor.execute("""
+                UPDATE game
+                SET hearts_remaining = hearts_remaining + 4
+                WHERE game_id = (SELECT MAX(game_id) FROM game) AND hearts_remaining < 3;
+            """)
+            cursor.execute("""
+                UPDATE game_food
+                SET quantity_remaining = quantity_remaining - 1
+                WHERE food_name = 'Roasted' AND quantity_remaining >= 1 AND game_id = (SELECT MAX(game_id) FROM game);
+            """)
+            conexion.commit()
+            addText("Has comido un plato asado y has subido 4 corazones.")
+        else:
+            addText("Ya tienes la cantidad máxima de corazones.")
+    else:
+        addText("No puedes comer eso. Intenta con 'eat apple', 'eat salad', 'eat pescatarian' o 'eat roasted'.")
 
 def obtener_manzana():
     cursor.execute("""
@@ -477,7 +565,17 @@ while True:
     if user_input.lower() == "castle":
         addText("You travel to Castle")
         import castle
-
+    
+    if user_input.lower() == "eat vegetables":
+        subir_vida("Apple")
+    elif user_input.lower() == "eat salad":
+            subir_vida("Salad")
+    elif user_input.lower() == "eat pescatarian":
+            subir_vida("pescatarian")
+    elif user_input.lower() == "eat roasted":
+            subir_vida("roasted")
+    if user_input.lower() == "attack":
+        swing_sword()
 
     user_input = user_input.split()
     if user_input[0].lower() == 'show':
@@ -516,34 +614,6 @@ while True:
         addText("Entrada no válida. Intenta de nuevo.")
 
 #NUEVA FUNCION DE LA LAGARTIJA
-def swing_sword():
-    global sword_usos
-    global lives_character
-
-    if sword_usos > 0:
-        sword_usos -= 1  # Reduce the sword's usage
-
-        # Simulate a 10% chance of killing a lizard and obtaining 1 meat
-        probability = random.randint(1, 10)
-        if probability == 1:
-            addText("You swung your sword in the air and killed a lizard!")
-            cursor.execute("""
-                UPDATE game_food
-                SET quantity_remaining = quantity_remaining + 1
-                WHERE food_name = 'meat';
-            """)
-            conexion.commit()
-            addText("You obtained 1 unit of meat.")
-        else:
-            addText("You swung your sword in the air, but missed. The lizard bit you!")
-            # The character loses a life point
-            if lives_character > 0:
-                lives_character -= 1
-                addText(f'Be careful, Link! You now have {lives_character} lives left.')
-                if lives_character == 0:
-                    addText('Game Over!')
-    else:
-        addText('Your sword is too worn out. Find another one.')
 conexion.close()
 print("Juego terminado.")
 
