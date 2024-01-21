@@ -16,5 +16,6 @@ Exploración Épica: Descubre un mundo expansivo lleno de paisajes pintorescos, 
 
 # Arte y diseño
 
+![image](https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/1beafe20-f100-41a5-b6a4-7aaccd8cecbb)
 
 
