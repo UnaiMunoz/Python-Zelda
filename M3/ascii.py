@@ -176,21 +176,6 @@ plot = ("""
 * Continue * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 """)
 
-game = ("""
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * Inventory *
-*                                                         *                   *
-*                                                         * Link        ♥ 5/5 *
-*                                                         * Blood moon in     *
-*                                                         *                   *
-*                                                         * Equipment         *
-*                                                         *        Wood Sword *
-*                                                         *            Shield *
-*                                                         *                   *
-*                                                         * Food              *
-*                                                         * Weapons           *
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-""")
-
 
 help_inventory = ("""
 * Help, inventory * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -267,21 +252,6 @@ necluda = [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '
 ]
 
 
-castle = ("""
-* Castle  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-*                                                          *                  *
-*       \ /                             Ganon ♥♥♥♥♥♥♥♥     *                  *
-*     -- O --                                              *                  *
-*       / \                                                *                  *
-*                              |>  v-v-v-v   |>            *                  *
-*                      ,   ,  /_\  |     |  /_\            *                  *
-*                      |\_/|  | |'''''''''''| |            *                  *
-*                      (q p),-| | ||  _  || | |'-._ |\     *                  *
-* OT!                X  \_/_(/| |    |#|    | | ) '-//     *                  *
-* OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO *                  *
-* Back, Go, Attack  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-""")
-
 the_end = ("""
 * Zelda saved * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *                                                                             *
@@ -330,7 +300,4 @@ menu_cocina = ("""
 
 
 
-for lista in map:
-    for elemento in lista:
-        print(elemento, end=' ')
-    print()  # Agrega un salto de línea después de imprimir cada lista
+
