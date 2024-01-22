@@ -571,7 +571,7 @@ def actualizar_zona(zona):
     cursor.execute(f"""
         UPDATE game
         SET region_char = '{zona}'
-        WHERE game_id = (SELECT MAX(game_id) FROM game);""")
+        WHERE game_id = (SELECT MAX(game_id));""")
 
 def movimiento(map, position, direction, steps):
     for _ in range(steps):
@@ -606,10 +606,9 @@ while True:
 
     if user_input.lower() == "castle":
         addText("You travel to Castle")
-        actualizar_zona(user_input)
+        actualizar_zona("Castle")
         conexion.commit()
         import castle
-    
     if user_input.lower() == "eat vegetables":
         subir_vida("Apple")
     elif user_input.lower() == "eat salad":
