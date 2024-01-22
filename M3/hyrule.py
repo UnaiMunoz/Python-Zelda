@@ -2,6 +2,7 @@ import os
 import random
 import mysql.connector
 from ascii import menu_cocina
+from ascii import map
 import cofres_objetos
 conexion = mysql.connector.connect(user='root', password='david',
                                    host='localhost',
@@ -171,6 +172,32 @@ def pescar():
             addText("Ya has pescado un pez en este mapa.")
             break
 
+def atacar_zorro(map, position):
+    global sword_usos  # Número máximo de usos de la espada
+    global lives_character
+    zorro_life = 1
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+            row = position[0] + i
+            column = position[1] + j
+            if 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'F':
+                attack = input("¿Quieres atacar al zorro?: ")
+                if attack.lower() == 'attack':
+                        # Decreasing the enemy's life
+                        zorro_life -= 1
+
+                        if zorro_life == 0:
+                            addText('Derrotaste al zorro, obtuviste uno de carne.')
+                            map[row][column] = '  ' 
+                        cursor.execute("""
+                            UPDATE game_food
+                            SET quantity_remaining = quantity_remaining + 1
+                            WHERE game_id = (SELECT MAX(game_id) FROM game) AND food_name = 'Meat';
+                        """)
+                        conexion.commit()
+                
+
+
 def swing_sword():
     probabilidad = random.randint(1,10)
     if probabilidad <= 1:
@@ -224,6 +251,8 @@ def special_symbols(map, new_position):
                 interactuar_santuario1(map, character_position)
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == '~':
                 pescar()
+            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'F':
+                atacar_zorro(map, new_position)
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'M':
                 abrir = input("¿Quieres abrir el cofre?: ")
                 if abrir.lower() == "yes":
@@ -660,6 +689,9 @@ while True:
         actualizar_zona("Gerudo")
         conexion.commit()
         import gerudo
+    if user_input.lower() == "show map":
+        addText("Showing Map")
+        print(map)
 
     if user_input.lower() == "death mountain":
         addText("You travel to Death Mountain")

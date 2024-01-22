@@ -1,6 +1,6 @@
 import os
 import random
-
+from ascii import map
 import mysql.connector
 from ascii import menu_cocina
 import cofres_objetos
@@ -165,6 +165,30 @@ def pescar():
             addText("Entrada no válida. Por favor, responde con 's' o 'n'.")
             showPrompt()
 
+def atacar_zorro(map, position):
+    global sword_usos  # Número máximo de usos de la espada
+    global lives_character
+    zorro_life = 1
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+            row = position[0] + i
+            column = position[1] + j
+            if 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'F':
+                attack = input("¿Quieres atacar al zorro?: ")
+                if attack.lower() == 'attack':
+                        # Decreasing the enemy's life
+                        zorro_life -= 1
+
+                        if zorro_life == 0:
+                            addText('Derrotaste al zorro, obtuviste uno de carne.')
+                            map[row][column] = '  ' 
+                        cursor.execute("""
+                            UPDATE game_food
+                            SET quantity_remaining = quantity_remaining + 1
+                            WHERE game_id = (SELECT MAX(game_id) FROM game) AND food_name = 'Meat';
+                        """)
+                        conexion.commit()
+
 def swing_sword():
     probabilidad = random.randint(1,10)
     if probabilidad <= 1:
@@ -218,10 +242,16 @@ def special_symbols(map, new_position):
                 interactuar_santuario4(map, character_position)
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == '~':
                 pescar()
+            elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'F':
+                atacar_zorro(map, new_position)
             elif 0 <= row < len(map) and 0 <= column < len(map[0]) and map[row][column] == 'M':
-                abrir = input("Quieres abrir el cofre?: ")
+                abrir = input("¿Quieres abrir el cofre?: ")
                 if abrir.lower() == "yes":
-                    cofres_objetos.abrir_cofre("Gerudo")
+                    objeto_obtenido = cofres_objetos.abrir_cofre("gerudo")
+                    addText(f"Has obtenido {objeto_obtenido}")
+                    map[row][column] = 'W'
+                else:
+                    addText("Decidiste no abrir el cofre.")
 
 def subir_vida(comida):
     global lives_character
@@ -541,7 +571,7 @@ def actualizar_zona(zona):
     cursor.execute(f"""
         UPDATE game
         SET region_char = '{zona}'
-        WHERE game_id = (SELECT MAX(game_id) FROM game);""")
+        WHERE game_id = (SELECT MAX(game_id));""")
 
 def movimiento(map, position, direction, steps):
     for _ in range(steps):
@@ -565,7 +595,9 @@ while True:
         actualizar_zona(user_input)
         conexion.commit()
         import hyrule
-
+    if user_input.lower() == "show map":
+        addText("Showing Map")
+        print(map)
     if user_input.lower() == "necluda":
         addText("You travel to Necluda")
         actualizar_zona(user_input)
@@ -574,10 +606,9 @@ while True:
 
     if user_input.lower() == "castle":
         addText("You travel to Castle")
-        actualizar_zona(user_input)
+        actualizar_zona("Castle")
         conexion.commit()
         import castle
-    
     if user_input.lower() == "eat vegetables":
         subir_vida("Apple")
     elif user_input.lower() == "eat salad":
