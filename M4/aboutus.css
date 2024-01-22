@@ -43,6 +43,8 @@ header {
 }
 
 section {
+  justify-content: center;
+  width: 60%;
   background-color: #fff;
   margin: 20px;
   padding: 20px;
