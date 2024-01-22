@@ -201,13 +201,14 @@ img:hover {
 
 .arma-item {
     margin: 10px;
+    max-width: 50%;
     text-align: center;
     justify-content: center;
     align-items: center;
 }
 
 .arma-item img {
-    max-width: 100%;
+    max-width: 40%;
     height: auto;
     justify-content: center;
     align-items: center;
