@@ -67,20 +67,21 @@ def abrir_cofre(zona):
         return None
 
     if zona in cofres_abiertos:
-        print("El cofre en esta zona ya está abierto.")
+        addText("El cofre en esta zona ya está abierto.")
         return None
 
     if zona in ["hyrule", "Gerudo"]:
-        opciones_espadas = ["espada_madera", "espada"]
+        opciones_espadas = ["Wood Sword", "Sword","Nothing"]
         objeto_obtenido = random.choice(opciones_espadas)
     elif zona in ["DeathMountain", "necluda"]:
-        opciones_escudos = ["escudo", "escudo_madera"]
+        opciones_escudos = ["Shield", "Wood Shield","Nothing"]
         objeto_obtenido = random.choice(opciones_escudos)
-    else:
-        objeto_obtenido = None  # Manejar el caso de una zona no válida
+
 
     cofres_abiertos.add(zona)
     addText(f"Has abierto el cofre en {zona}. ¡Obtuviste: {objeto_obtenido}!")
+    if objeto_obtenido == "Nothing":
+        addText("Este cofre esta vacío")
     return objeto_obtenido
 
 def resetear_cofres():
