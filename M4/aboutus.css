@@ -1,8 +1,4 @@
-body {
-  margin: 0;
-  padding: 0;
-  padding-top: 230px;
-}
+
 
 @keyframes aparecerDesaparecer {
   0%, 100% {
@@ -61,21 +57,19 @@ section {
   border: 5px solid #20ce17;
 }
 
-/* Otros estilos permanecen sin cambios */
-/* ... */
-
-/* Otros estilos permanecen sin cambios */
-/* ... */
 
 #zelda-game.project-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 20px; /* Agrega un espacio interno para que esté más ajustado hacia el centro */
+  padding: 20px;
   position: relative;
-  overflow: hidden; /* Para ocultar el contenido que se sale fuera del contenedor */
+  overflow: hidden;
+  margin: 0 auto; /* Agrega esta línea para centrar la sección horizontalmente */
+  max-width: 800px; /* Puedes ajustar el ancho máximo según sea necesario */
 }
+
 
 #zelda-game .content {
   width: 100%; /* Haz que el contenido ocupe el 100% del ancho disponible */
@@ -94,33 +88,6 @@ section {
   border: 5px solid #20ce17; /* Añade un marco a la imagen */
   border-radius: 0; /* Hace que el marco sea completamente cuadrado */
   margin-bottom: 10px;
-}
-
-/* Nuevos estilos para las imágenes a la izquierda y derecha */
-.left-image,
-.right-image {
-  position: absolute;
-  width: 100px; /* Ajusta el ancho según sea necesario */
-  top: 50%;
-  transform: translateY(-50%);
-  margin: 10px; /* Agrega espacio entre el borde exterior y la imagen */
-}
-
-.left-image {
-  left: -45px; /* Mueve la imagen hacia fuera de la página a la izquierda */
-}
-
-.right-image {
-  right: -70px; /* Mueve la imagen hacia fuera de la página a la izquierda */
-}
-
-
-
-
-body {
-  margin: 0;
-  padding: 0;
-  padding-top: 230px;
 }
 
 @keyframes aparecerDesaparecer {
@@ -145,8 +112,6 @@ body {
   border-radius: 10px;
 }
 
-/* Resto de tu CSS existente... */
-
 /* Estilo para los programadores en línea */
 .container {
   display: flex;
@@ -158,9 +123,4 @@ body {
   width: 30%; /* Ajusta el ancho según sea necesario */
 }
 
-.developer img {
-  display: block;
-  margin: 0 auto; /* Centra la imagen dentro de su contenedor */
-}
 
-/* Añade otros estilos según sea necesario */
