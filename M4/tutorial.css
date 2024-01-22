@@ -13,6 +13,7 @@ header {
 }
 
 .contenedor {
+    margin-top: 55%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -23,6 +24,7 @@ header {
 section {
     width: 70%;
     margin-bottom: 20px;
+    text-align: center; /* Añadido para centrar el contenido del section */
 }
 
 section:last-child {
@@ -44,15 +46,32 @@ p {
 }
 
 .imagen-marco {
-    width: 100px;
-    height: 100px;
-    background-color: #ddd;
+    position: relative;
+    width: 50%;
+    height: 65%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
     border: 2px solid #333;
     border-radius: 8px;
-    margin: 10px auto;
-    animation: bounce 1s infinite alternate;
+    margin: 0 auto; /* Añadido para centrar el bloque de imagen en el contenedor */
 }
 
+.imagen-marco img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.imagen-marco2 {
+    text-align: center;
+}
+
+.imagen-centrada {
+    max-width: 50%;
+    margin: 10px; /* Ajusta el margen según sea necesario */
+}
 @keyframes bounce {
     0% {
         transform: translateY(0);
@@ -65,10 +84,10 @@ p {
 /* Reglas de medios para pantallas más pequeñas (dispositivos móviles) */
 @media only screen and (max-width: 600px) {
     .contenedor {
-        width: 90%; /* Cambiar el ancho del contenedor para pantallas más pequeñas */
+        width: 90%;
     }
 
     section {
-        width: 100%; /* Hacer que las secciones ocupen todo el ancho en pantallas más pequeñas */
+        width: 100%;
     }
 }
