@@ -1,51 +1,63 @@
 body {
-    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
 }
 
-.container {
-    position: relative;
-    height: auto;
-    width: 400px;
-    margin: auto;
+header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1em 0;
 }
 
-.container img {
-    width: 100%;
-    height: auto;
-    margin: auto;
-    transition: opacity 0.3s ease;
+.contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
 }
 
-.t,
-.t2 {
-    right: 15%;
-    background-color: rgba(0, 0, 0, 0.8);
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 90%;  
-    padding: 10px;
-    box-sizing: border-box;
-    transition: all 0.4s;
-    border-radius: 10px;
-    transform: translateX(10px); 
-    opacity: 0; 
-    height: 170%;
-
+section {
+    width: 70%;
+    margin-bottom: 20px;
 }
 
-.t2 {
-    left: auto;
-    right: -185%;  
+section:last-child {
+    margin-bottom: 0;
 }
 
-.container:hover .t,
-.container:hover .t2 {
-    transform: translateX(-100%); 
-    opacity: 1; 
+section div {
+    margin-top: 20px;
 }
 
-.hover-trigger:hover + .t img,
-.hover-trigger:hover + .t2 img {
-    opacity: 1;
+h2 {
+    color: #333;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
+
+p {
+    color: #555;
+}
+
+.imagen-marco {
+    width: 100px;
+    height: 100px;
+    background-color: #ddd;
+    border: 2px solid #333;
+    border-radius: 8px;
+    margin: 10px auto; /* Añadido para centrar horizontalmente */
+    animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-10px);
+    }
 }
