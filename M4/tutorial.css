@@ -49,7 +49,7 @@ p {
     background-color: #ddd;
     border: 2px solid #333;
     border-radius: 8px;
-    margin: 10px auto; /* Añadido para centrar horizontalmente */
+    margin: 10px auto;
     animation: bounce 1s infinite alternate;
 }
 
@@ -59,5 +59,16 @@ p {
     }
     100% {
         transform: translateY(-10px);
+    }
+}
+
+/* Reglas de medios para pantallas más pequeñas (dispositivos móviles) */
+@media only screen and (max-width: 600px) {
+    .contenedor {
+        width: 90%; /* Cambiar el ancho del contenedor para pantallas más pequeñas */
+    }
+
+    section {
+        width: 100%; /* Hacer que las secciones ocupen todo el ancho en pantallas más pequeñas */
     }
 }
