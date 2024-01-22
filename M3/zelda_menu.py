@@ -144,7 +144,7 @@ def mainmenu():
                             import hyrule   
                     else:
                         addText("Invalid action")                    
-                elif option_game == "Back":
+                elif option_game.lower() == "back":
                     addText(option_game)
                     break
                 else:
@@ -155,7 +155,7 @@ def mainmenu():
                 print(help_mainmenu)
                 showPrompt()
                 optionhelp = input("\nWhat to do now ? ")
-                if optionhelp == "Back":
+                if optionhelp.lower() == "back":
                     addText(optionhelp)
                     break
                 else:
@@ -167,7 +167,7 @@ def mainmenu():
                 print(about)
                 showPrompt()
                 option_about = input("\nWhat to do now ? ")
-                if option_about == "Back":
+                if option_about.lower() == "back":
                     addText(option_about)
                     break
                 else:

@@ -324,7 +324,7 @@ def obtener_pescao():
     cursor.execute("""
     UPDATE game_food
     SET quantity_remaining = quantity_remaining + 1
-    WHERE food_name = 'pescao';""")
+    WHERE food_name = 'pescao'and game_id = (SELECT MAX(game_id) FROM game);""")
     conexion.commit()
     addText('Has pescado un pez')
 

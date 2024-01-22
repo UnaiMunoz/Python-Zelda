@@ -133,7 +133,7 @@ help_new_game = ("""
 about = ("""   
 * About * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 *                                                                             *
-*        Game developed by ‘Team 1, The Whales’ :                             *
+*        Game developed by ‘Team 5, The Whales’ :                             *
 *                                                                             *
 *                                                                             *
 *        David Bargados                                                       *
@@ -169,7 +169,7 @@ plot = ("""
 *   Ganon. He has taken over the Guardians and filled Hyrule with monsters.  *
 *                                                                            *
 *                                                                            *
-*   But a young man named 'Link' has just awakened and                       *
+*   But a young man named 'David' has just awakened and                      *
 *   must reclaim the Guardians to defeat Ganon and save Hyrule.              *
 *                                                                            *
 *                                                                            *
