@@ -74,18 +74,21 @@ def move_character(map, position, direccion):
 def cook(cooking):
     if cooking.lower() == "salad":
         addText("You selected Salad")
+        # Assuming 'game_food' is the table in your database
         cursor.execute("""
         UPDATE game_food
         SET quantity_remaining = quantity_remaining - 2
-        WHERE food_name = 'Apple' AND quantity_remaining >= 2 AND game_id = (SELECT MAX(game_id) FROM game);""")
+        WHERE food_name = 'Apple' AND quantity_remaining >= 2 AND game_id = 1;""")
+
         if cursor.rowcount == 0:
             addText("You can't cook that! Not enough 'Apple' available.")
         else:
-        #AÑADIR ENSALADA
+            # Adding salad
             cursor.execute("""
             UPDATE game_food
             SET quantity_remaining = quantity_remaining + 1
-            WHERE food_name = 'Salad' AND  game_id = (SELECT MAX(game_id) FROM game);""")
+            WHERE food_name = 'Salad' AND game_id = 1;""")
+            conexion.commit()
         #PESCADO
     elif cooking.lower() == "pescatarian":
         addText("You selected Pescatarian")
@@ -124,7 +127,8 @@ def cook(cooking):
         check_comida = cursor.fetchone()
         check_manzanas = check_comida[0]
         check_carne = check_comida[1]
-        
+        conexion.commit()
+
         if check_manzanas is not None and check_manzanas >= 1 and check_carne is not None and check_carne >= 1:
             cursor.execute("""
                 UPDATE game_food
@@ -137,6 +141,7 @@ def cook(cooking):
                 SET quantity_remaining = quantity_remaining + 1
                 WHERE food_name = 'roasted';
             """)
+            conexion.commit()
         else:
             addText("You can't cook that! Not enough 'Apple' or 'Meat' available.")
         addText("You cant cook that!!!")

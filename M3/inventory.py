@@ -213,7 +213,7 @@ def contar_roasted():
         else:
             return 0
 
-print(f"""
+inventario = (f"""
 * * * * * * Inventory *
 *                     *                   
 * {get_name()}         ♥{vida()} /{vida_total()} *
@@ -227,8 +227,8 @@ print(f"""
 * Weapons         {armas()}   *
 * * * * * * * * * * * *
 """)
-print(f"""
-* * * * * *Food * * * *
+weapons = (f"""
+* * * * * *Weapons* * *
 *                     *                   
 *                     *
 * Wood Sword     {durability("Wood Sword")}/{cantidad("Wood Sword")}  *
@@ -241,7 +241,7 @@ print(f"""
 *  Equipped:     {(equip(("Shield")))}    *
 * * * * * * * * * * * *
 """)
-print(f"""
+comida = (f"""
 * * * * * *Food * * * *
 *                     *                   
 *Vegetables {contar_manzanas()}        *
@@ -257,4 +257,21 @@ print(f"""
 """)
 
 # Close the connection
+
+inventario_grande = (f"""
+* * * * * * Inventory * * * * * *Weapons* * * * * * * * *Food * * *
+*                     *                     *                     *   
+* {get_name()}         ♥{vida()} /{vida_total()} *                     *Vegetables {contar_manzanas()}        *
+*                     * Wood Sword     {durability("Wood Sword")}/{cantidad("Wood Sword")}  *                     *
+*Equipment            *  Equipped:     {equip("Wood Sword")}    *Fish  {contar_pescados()}              *
+*               Sword * Sword          {durability("Sword")}/{cantidad("Sword")}  *Meat  {contar_carne()}              *
+*              Shield *  Equipped:     {(equip(("Sword")))}    *                     *
+*                     * Wood Shield    {durability("Wood Shield")}/{cantidad("Wood Shield")}  *Salads {contar_salad()}             *
+*                     *  Equipped:     {(equip(("Wood Shield")))}    *Pescatarian {contar_pescatarian()}        *
+* Food            {contar_comida()}  * Shield         {durability("Shield")}/{cantidad("Shield")}  *Roasted {contar_roasted()}            *                     
+* Weapons         {armas()}   *  Equipped:     {(equip(("Shield")))}    *                     *                                                
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ 
+""")
+
 conexion.close()
