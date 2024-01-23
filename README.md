@@ -32,3 +32,5 @@ Exploración Épica: Descubre un mundo expansivo lleno de paisajes pintorescos, 
   <img src="https://github.com/UnaiMunoz/Python-Zelda/assets/152631520/b5e423eb-d788-426d-860a-2c69e6539768" alt="Image 5" width="500"/>
 </p>
 
+
+Hecho por David Bargados, Marc Cachinero y Unai Muñoz
